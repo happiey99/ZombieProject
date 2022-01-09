@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     CharacterController Cc;
     float gravity = -20;
     float jumpHight = 6;
+    float speed = 6f;
+    
     Vector3 velocity;
 
     public Transform groundCheck;
@@ -31,13 +33,21 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = -2f;
         }
-       
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
-        Cc.Move(move*6*Time.deltaTime);
+        Vector3 direction = new Vector3(horizontal, 0, vertical).normalized;
+
+        if(direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+
+            Cc.Move(direction * speed * Time.deltaTime);
+        }
 
         if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
