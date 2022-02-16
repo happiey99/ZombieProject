@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82a8d47d-a73c-410a-8f79-eeafbf1bde64" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ZombieProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZombieProject/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/CameraMove.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CameraMove.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
     </list>
@@ -80,6 +80,9 @@
       <workItem from="1644821401840" duration="1877000" />
       <workItem from="1644823321397" duration="40000" />
       <workItem from="1644823519886" duration="2326000" />
+      <workItem from="1644901063294" duration="1992000" />
+      <workItem from="1644903386042" duration="11307000" />
+      <workItem from="1644993039122" duration="4781000" />
     </task>
     <servers />
   </component>

@@ -47,15 +47,14 @@ public class CameraMove : MonoBehaviour
         xCam += Input.GetAxis("Mouse Y") ;
         yCam += Input.GetAxis("Mouse X")  * -1;
 
-        xCam = Mathf.Clamp(xCam, -30, 30);
+        xCam = Mathf.Clamp(xCam, -60, 30);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(xCam, yCam, 0),0.1f);
     }
 
     public void Follow()
     {
-        transform.position =
-            Vector3.Lerp(transform.position, player.transform.position, Time.deltaTime * cameraMoveSpeed);
+        transform.position = player.transform.position;
     }
     
     RaycastHit hit;
