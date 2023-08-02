@@ -9,13 +9,18 @@ public class CharInfoManager
     public int AmmoAmount;
 
     public int curAmmo;
+
     public int curFullAmmo;
+
+    public bool EquipGun = false;
+
+    public int wholeAmount;
 
     public void Init()
     {
-        curAmmo = 30;
+        curAmmo = 0;
         AmmoAmount = 30;
-        curFullAmmo = 30;
+        curFullAmmo = 0;
     }
     public bool IsEmptyAmmo()
     {
@@ -28,6 +33,10 @@ public class CharInfoManager
         if (curAmmo == AmmoAmount)
             return true;
         return false;
+    }
+    public void GetAmmo(int _curFullAmmo)
+    {
+        curFullAmmo += _curFullAmmo;
     }
     public void Reloading()
     {

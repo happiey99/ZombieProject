@@ -63,7 +63,7 @@ public class CameraMove : MonoBehaviour
     {
         xCam += Input.GetAxis("Mouse Y") * -1;
         yCam += Input.GetAxis("Mouse X");
-        xCam = Mathf.Clamp(xCam, -60, 30);
+        xCam = Mathf.Clamp(xCam, -60, 50);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(xCam, yCam, 0), 0.1f);
     }

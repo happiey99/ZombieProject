@@ -10,9 +10,15 @@ public class Managers : MonoBehaviour
 
     CharStateManager CharState = new CharStateManager();
     CharInfoManager CharInfo = new CharInfoManager();
+    InventoryManager Inven = new InventoryManager();
+    EquipManager Equip = new EquipManager();
+    ItemList Item = new ItemList();
 
     public static CharStateManager _charState { get { return Instance.CharState; } }
     public static CharInfoManager _charInfo { get { return Instance.CharInfo; } }
+    public static ItemList _item { get { return Instance.Item; } }
+    public static InventoryManager _inven { get { return Instance.Inven; } }
+    public static EquipManager _equip { get { return Instance.Equip; } }
 
     private void Update()
     {
@@ -39,6 +45,8 @@ public class Managers : MonoBehaviour
 
             s_instance.CharInfo.Init();
             s_instance.CharState.Init();
+            s_instance.Inven.Init();
+            s_instance.Item.Init();
         }
     }
 

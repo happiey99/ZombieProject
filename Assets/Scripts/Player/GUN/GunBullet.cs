@@ -8,6 +8,8 @@ public class GunBullet : MonoBehaviour
     [SerializeField] float speed = 50;
     [SerializeField] Transform spark;
     [SerializeField] Transform BulletMark;
+    [SerializeField] Transform BloodMark;
+
 
 
 
@@ -23,6 +25,15 @@ public class GunBullet : MonoBehaviour
 
             Instantiate(spark, transform.position, Quaternion.LookRotation(transform.forward * -1));
             Instantiate(BulletMark, transform.position, Quaternion.FromToRotation(-Vector3.forward, contact.normal));
+
+            Destroy(this.gameObject);
+        }
+        else if(collision.gameObject.tag == "zombie")
+        {
+            ContactPoint contact = collision.contacts[0];
+
+            //Instantiate(spark, transform.position, Quaternion.LookRotation(transform.forward * -1));
+            Instantiate(BloodMark, transform.position, Quaternion.FromToRotation(-Vector3.forward, contact.normal));
 
             Destroy(this.gameObject);
         }

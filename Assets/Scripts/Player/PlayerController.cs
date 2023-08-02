@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController CC;
     float moveAniSpeed = 3.0f;
     float turnSpeed = 6.0f;
-    [SerializeField] PlayerGun playerGun;
+    [SerializeField] public PlayerGun playerGun;
     [SerializeField] ParticleSystem GunShells;
     [SerializeField] ParticleSystem GunShotEF;
     [SerializeField] Transform bullet;
@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject Back;
     [SerializeField] GameObject Gun;
 
+    [SerializeField] public GameObject Back_Attack;
+    [SerializeField] public GameObject Hand_Attack;
 
 
 
@@ -74,16 +76,21 @@ public class PlayerController : MonoBehaviour
         Gravity();
         PlayerInput();
         PlayerJump();
+
+
         Aimming();
         Shot();
         HeadAim();
         Reload();
-        Seat();
 
+
+        Seat();
+        SetGun();
+        SetAttack();
         OpenInven();
         BodyW.weight = Mathf.Lerp(BodyW.weight, rigWeight, Time.deltaTime * 20f);
         AimW.weight = Mathf.Lerp(AimW.weight, rigWeight, Time.deltaTime * 20f);
-
+        PlayerAnimator.SetBool("Grap", Managers._charState.GrapItem);
     }
 
     float Aiminput = 0;
@@ -93,7 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if(Managers._charState.invenOpen)
+            if (Managers._charState.invenOpen)
             {
                 Managers._charState.invenOpen = false;
                 return;
@@ -101,12 +108,13 @@ public class PlayerController : MonoBehaviour
             Managers._charState.invenOpen = true;
         }
     }
-        
+
     void Aimming()
     {
 
-        if (Input.GetMouseButton(1) || (Managers._charState.isReload))
+        if ((Input.GetMouseButton(1) || (Managers._charState.isReload)) && Managers._charState.E_Gun)
         {
+
             Aiminput = Mathf.Lerp(Aiminput, 1, Time.deltaTime * moveAniSpeed);
             rigWeight = 1;
             seatWeight = 0;
@@ -132,7 +140,7 @@ public class PlayerController : MonoBehaviour
         PlayerAnimator.SetBool("IsAim", Managers._charState.isAim);
 
     }
-    
+
     void AnimationWeight()
     {
         if (Managers._charState.isSeat)
@@ -150,7 +158,7 @@ public class PlayerController : MonoBehaviour
     }
     void Reload()
     {
-        if (Managers._charState.isAttack|| Managers._charInfo.IsEmptyAmmo()|| Managers._charInfo.IsFullAmmo())
+        if (Managers._charState.isAttack || Managers._charInfo.IsEmptyAmmo() || Managers._charInfo.IsFullAmmo())
             return;
         if ((Input.GetKeyDown(KeyCode.R) || Managers._charInfo.curAmmo <= 0) && Managers._charState.isAim)
         {
@@ -162,6 +170,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
 
     public float ShotTime = 0;
     float callTime = 0.3f;
@@ -177,6 +186,7 @@ public class PlayerController : MonoBehaviour
                 if (Managers._charState.isAim && Managers._charInfo.curAmmo > 0)
                 {
                     ShotTime = callTime;
+                    //curAmmo
                     Managers._charInfo.curAmmo -= 1;
                     Transform b = Instantiate(bullet, playerGun.ShootPoint.transform.position, Quaternion.identity);
                     b.transform.forward = playerGun.ShootPoint.transform.forward;
@@ -303,6 +313,49 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    void SetGun()
+    {
+        if (Managers._charState.E_Gun)
+        {
+            if (Back.activeSelf)
+            {
+                if (!Back.transform.Find(Managers._equip.Gun.ItemName).gameObject.activeSelf)
+                    Back.transform.Find(Managers._equip.Gun.ItemName).gameObject.SetActive(true);
+            }
+            if (Gun.activeSelf)
+            {
+                if (!Gun.transform.Find(Managers._equip.Gun.ItemName).gameObject.activeSelf)
+                    Gun.transform.Find(Managers._equip.Gun.ItemName).gameObject.SetActive(true);
+            }
+        }
+        
+       
+    }
+
+    void SetAttack()
+    {
+        if (Managers._charState.E_Attack)
+        {
+            if (Back_Attack.activeSelf)
+            {
+                if (!Back_Attack.transform.Find(Managers._equip.Attack.ItemName).gameObject.activeSelf)
+                    Back_Attack.transform.Find(Managers._equip.Attack.ItemName).gameObject.SetActive(true);
+            }
+            if (Hand_Attack.activeSelf)
+            {
+                if (!Hand_Attack.transform.Find(Managers._equip.Attack.ItemName).gameObject.activeSelf)
+                    Hand_Attack.transform.Find(Managers._equip.Attack.ItemName).gameObject.SetActive(true);
+            }
+        }
+       
+       
+    }
+
+
+
+
+
     //float Increase(float curValue, float _num)
     //{
     //    float value = curValue;
