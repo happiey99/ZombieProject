@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
 
     Camera _camera;
 
+
+    bool isJump;
+    bool isFalling;
+    bool isRunning;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,21 +40,31 @@ public class PlayerController : MonoBehaviour
 
         _camera = Camera.main;
 
-        groundMask =  LayerMask.GetMask("Ground");
+        groundMask = LayerMask.GetMask("Ground");
     }
 
     // Update is called once per frame
     void Update()
     {
         isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
-      
-       // ani.SetBool("isJumping", isGround);
-        
+        if (isGround)
+        {
+            isFalling = false;
+            isJump = false;
+        }
+        else
+        {
+            isFalling = true;
+        }
+        // ani.SetBool("isJumping", isGround);
+
         Gravity();
 
         Jump();
         Move();
 
+
+        AnimationState();
     }
 
 
@@ -61,7 +76,7 @@ public class PlayerController : MonoBehaviour
     float aniSpeed = 10;
     void Move()
     {
-        
+
         float vertical = Input.GetAxis("Vertical");
         float horizental = Input.GetAxis("Horizontal");
 
@@ -70,12 +85,13 @@ public class PlayerController : MonoBehaviour
         if (move == Vector3.zero)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
+            isRunning = false;
         }
         else
         {
             lookForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
             lookRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
-        
+
             moveDir = (lookForward * move.z) + lookRight * move.x;
 
             transform.rotation = Quaternion.LookRotation(moveDir);
@@ -84,7 +100,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
             else
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
-
+            isRunning = true;
         }
 
 
@@ -96,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
     void Gravity()
     {
-        if(isGround && velocity.y < 0)
+        if (isGround && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -106,13 +122,14 @@ public class PlayerController : MonoBehaviour
         cc.Move(velocity * Time.deltaTime);
     }
 
-    
+
     void Jump()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Space) && isGround) 
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGround)
         {
-          
+            isJump = true;
+     
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
 
@@ -120,5 +137,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    
+    void AnimationState()
+    {
+        ani.SetBool("isJump", isJump);
+        ani.SetBool("isFalling", isFalling);
+        ani.SetBool("isRunning", isRunning);
+        ani.SetBool("isGround", isGround);
+    }
 }
