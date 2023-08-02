@@ -92,10 +92,10 @@ public class PlayerController : MonoBehaviour
             lookForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
             lookRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
 
-            moveDir = (lookForward * move.z) + lookRight * move.x;
+            moveDir = (lookForward * move.z) + (lookRight * move.x);
 
-            transform.rotation = Quaternion.LookRotation(moveDir);
-
+            //transform.rotation = Quaternion.LookRotation(moveDir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
             if (Input.GetKey(KeyCode.LeftShift))
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
             else
@@ -107,6 +107,8 @@ public class PlayerController : MonoBehaviour
         ani.SetFloat("move", moveSpeed);
 
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
+
+
     }
 
 
@@ -129,7 +131,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGround)
         {
             isJump = true;
-     
+
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
 
