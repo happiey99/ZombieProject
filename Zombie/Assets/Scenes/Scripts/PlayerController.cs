@@ -56,7 +56,6 @@ public class PlayerController : MonoBehaviour
         {
             isFalling = true;
         }
-        // ani.SetBool("isJumping", isGround);
 
         Gravity();
 

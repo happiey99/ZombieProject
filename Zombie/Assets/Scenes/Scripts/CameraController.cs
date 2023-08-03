@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
         LookAround();
         AimPositioin();
         ClampAroundHead();
-        CameraDistance();
+       
         //CameraRayHitWall();
     }
 
@@ -47,10 +47,6 @@ public class CameraController : MonoBehaviour
 
     public float distance;
 
-    void CameraDistance()
-    {
-
-    }
 
     void ClampAroundHead()
     {
