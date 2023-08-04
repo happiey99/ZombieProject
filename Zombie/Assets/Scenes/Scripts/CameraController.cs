@@ -13,9 +13,11 @@ public class CameraController : MonoBehaviour
     float x = 0;
     float y = 0;
 
+
     PlayerController player;
 
-    Vector3 cameraOriPosition;
+    public Vector3 cameraOriPosition;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,9 +26,8 @@ public class CameraController : MonoBehaviour
         player = transform.parent.GetComponent<PlayerController>();
 
 
-        cameraOriPosition = new Vector3(Camera.main.transform.position.x,
-           Camera.main.transform.position.y,
-           Camera.main.transform.position.z);
+        cameraOriPosition = new Vector3(0, 0, -2);
+
     }
 
     // Update is called once per frame
@@ -34,13 +35,15 @@ public class CameraController : MonoBehaviour
     {
         Camera.main.transform.LookAt(cameraTarget);
         LookAround();
+        MouseWheel();
+
         AimPositioin();
         ClampAroundHead();
-       
+
         CameraRayHitWall();
     }
 
-  
+
     void LookAround()
     {
         x += Input.GetAxis("Mouse X");
@@ -67,7 +70,7 @@ public class CameraController : MonoBehaviour
         {
             rig.weight = Mathf.Lerp(rig.weight, 0, 0.1f);
         }
-       
+
     }
 
 
@@ -97,7 +100,7 @@ public class CameraController : MonoBehaviour
         Ray ray = new Ray(cameraTarget.position, CameraRayDir);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray,out hit, rayDis))
+        if (Physics.Raycast(ray, out hit, rayDis))
         {
             Camera.main.transform.position =
                 Vector3.Lerp(Camera.main.transform.position,
@@ -107,12 +110,26 @@ public class CameraController : MonoBehaviour
         else
         {
             Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition,
-                new Vector3(0, 0, -2),
+               cameraOriPosition,
                 0.7f * Time.deltaTime * 10);
         }
 
     }
 
-    
+    float wheelVelue = -2;
+
+
+    void MouseWheel()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+      
+        wheelVelue = Mathf.Clamp(wheelVelue, -10, -1);
+
+        wheelVelue += scroll;
+
+        cameraOriPosition = new Vector3(0, 0, wheelVelue);
+    }
+
+
 
 }
