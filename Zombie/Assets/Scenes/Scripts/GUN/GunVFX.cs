@@ -23,19 +23,18 @@ public class GunVFX : MonoBehaviour
 
     void PlayParticle(ParticleSystem p)
     {
-        if (!p.isPlaying)
-            p.Play();
+        p.Play();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B) )
+        if (Input.GetKeyDown(KeyCode.B))
         {
             PlayParticle(bullit_Shell);
             PlayParticle(gun_Shot);
         }
-        if(Input.GetKeyUp(KeyCode.B))
+        if (Input.GetKeyUp(KeyCode.B))
         {
             StopParticle();
         }
