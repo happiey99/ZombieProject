@@ -54,7 +54,6 @@ public class CameraController : MonoBehaviour
                 Vector3.Lerp(Camera.main.transform.position,
                 hit.point,
                 0.7f * Time.deltaTime * 10);
-            Debug.Log(hit.transform.gameObject.name);
         }
         else
         {
