@@ -93,7 +93,6 @@ public class PlayerController : MonoBehaviour
 
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
-            //transform.rotation = Quaternion.LookRotation(moveDir);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
             if (Input.GetKey(KeyCode.LeftShift))
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);

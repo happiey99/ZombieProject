@@ -15,12 +15,18 @@ public class CameraController : MonoBehaviour
 
     PlayerController player;
 
+    Vector3 cameraOriPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         player = transform.parent.GetComponent<PlayerController>();
+
+
+        cameraOriPosition = new Vector3(Camera.main.transform.position.x,
+           Camera.main.transform.position.y,
+           Camera.main.transform.position.z);
     }
 
     // Update is called once per frame
@@ -31,7 +37,7 @@ public class CameraController : MonoBehaviour
         AimPositioin();
         ClampAroundHead();
        
-        //CameraRayHitWall();
+        CameraRayHitWall();
     }
 
   
@@ -64,10 +70,9 @@ public class CameraController : MonoBehaviour
        
     }
 
-    public Transform[] g;
+
     void AimPositioin()
     {
-        g = new Transform[4];
         Vector2 midOfS = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
         Ray ray = Camera.main.ScreenPointToRay(midOfS);
@@ -79,29 +84,35 @@ public class CameraController : MonoBehaviour
             if (hits[i].transform.gameObject.layer != 6)
             {
                 aimTarget.position = hits[i].point;
-                g[i] = hits[i].transform;
                 break;
             }
         }
     }
 
-    
+
     void CameraRayHitWall()
     {
         Vector3 CameraRayDir = (Camera.main.transform.position - cameraTarget.position).normalized;
-        float dis = CameraRayDir.magnitude;
-
+        float rayDis = CameraRayDir.magnitude;
         Ray ray = new Ray(cameraTarget.position, CameraRayDir);
+        RaycastHit hit;
 
-        if(Physics.Raycast(ray, dis))
+        if (Physics.Raycast(ray,out hit, rayDis))
         {
-            
+            Camera.main.transform.position =
+                Vector3.Lerp(Camera.main.transform.position,
+                hit.point,
+                0.7f * Time.deltaTime * 10);
         }
         else
         {
-
+            Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition,
+                new Vector3(0, 0, -2),
+                0.7f * Time.deltaTime * 10);
         }
-        
+
     }
+
+    
 
 }
