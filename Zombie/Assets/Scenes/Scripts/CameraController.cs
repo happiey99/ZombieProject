@@ -64,8 +64,10 @@ public class CameraController : MonoBehaviour
        
     }
 
+    public Transform[] g;
     void AimPositioin()
     {
+        g = new Transform[4];
         Vector2 midOfS = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
         Ray ray = Camera.main.ScreenPointToRay(midOfS);
@@ -77,6 +79,7 @@ public class CameraController : MonoBehaviour
             if (hits[i].transform.gameObject.layer != 6)
             {
                 aimTarget.position = hits[i].point;
+                g[i] = hits[i].transform;
                 break;
             }
         }
