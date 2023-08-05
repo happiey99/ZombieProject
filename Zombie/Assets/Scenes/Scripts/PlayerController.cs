@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     #region components
     CharacterController cc;
-    Animator ani;
+    PlayerAnimation PA;
     #endregion
 
     #region Gravity
@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     float gravity = -9.8f;
 
-    bool isGround;
+    //bool isGround;
 
     LayerMask groundMask;
     #endregion
@@ -23,20 +23,24 @@ public class PlayerController : MonoBehaviour
 
     float moveSpeed = 2f;
 
+    float aniSpeed = 10;
+
     Camera _camera;
 
+    Vector3 moveDir;
 
-    bool isJump;
-    bool isFalling;
-    bool isRunning;
-    bool isClimbing;
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         #region GetComponent
         cc = GetComponent<CharacterController>();
-        ani = GetComponent<Animator>();
+
+        PA = GetComponent<PlayerAnimation>();
+        if (PA == null)
+        {
+            PA = gameObject.AddComponent<PlayerAnimation>();
+        }
         #endregion
 
         _camera = Camera.main;
@@ -48,55 +52,40 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKey(KeyCode.E)) { isClimbing = true; }
-        else { isClimbing = false; }
-
-
-
-        isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
-        if (isGround)
+        PA._isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
+        if (PA._isGround)
         {
-            isFalling = false;
-            isJump = false;
+            PA._isFalling = false;
+            PA._isJump = false;
         }
         else
         {
-            isFalling = true;
+            PA._isFalling = true;
         }
 
         Gravity();
-
         Jump();
         Move();
-
-
-        AnimationState();
     }
 
 
-    Vector3 lookForward;
-    Vector3 lookRight;
-    Vector3 moveDir;
-
-
-    float aniSpeed = 10;
     void Move()
     {
 
         float vertical = Input.GetAxis("Vertical");
         float horizental = Input.GetAxis("Horizontal");
-
+      
         Vector3 move = new Vector3(horizental, 0, vertical);
 
         if (move == Vector3.zero)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
-            isRunning = false;
+            PA._isRunning = false;
         }
         else
         {
-            lookForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
-            lookRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
+            Vector3 lookForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
+            Vector3 lookRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
 
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
@@ -105,12 +94,11 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
             else
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
-            isRunning = true;
+            PA._isRunning = true;
         }
 
-
-        ani.SetFloat("move", moveSpeed);
-
+        PA._moveSpeed = moveSpeed;
+    
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
 
 
@@ -119,7 +107,7 @@ public class PlayerController : MonoBehaviour
 
     void Gravity()
     {
-        if (isGround && velocity.y < 0)
+        if (PA._isGround && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -133,23 +121,16 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (Input.GetKeyDown(KeyCode.Space) && PA._isGround)
         {
-            isJump = true;
+            PA._isJump = true;
 
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
 
         }
     }
-
-
-    void AnimationState()
-    {
-        ani.SetBool("isJump", isJump);
-        ani.SetBool("isFalling", isFalling);
-        ani.SetBool("isRunning", isRunning);
-        ani.SetBool("isGround", isGround);
-        ani.SetBool("isClimbing", isClimbing);
-    }
 }
+
+
+
