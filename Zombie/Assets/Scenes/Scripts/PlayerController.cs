@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     bool isJump;
     bool isFalling;
     bool isRunning;
+    bool isClimbing;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKey(KeyCode.E)) { isClimbing = true; }
+        else { isClimbing = false; }
+
+
+
         isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
         if (isGround)
         {
@@ -143,5 +150,6 @@ public class PlayerController : MonoBehaviour
         ani.SetBool("isFalling", isFalling);
         ani.SetBool("isRunning", isRunning);
         ani.SetBool("isGround", isGround);
+        ani.SetBool("isClimbing", isClimbing);
     }
 }
