@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     #region components
     CharacterController cc;
-    PlayerAnimation PA;
+    PlayerAnimation ani;
     #endregion
 
     #region Gravity
@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour
         #region GetComponent
         cc = GetComponent<CharacterController>();
 
-        PA = GetComponent<PlayerAnimation>();
-        if (PA == null)
+        ani = GetComponent<PlayerAnimation>();
+        if (ani == null)
         {
-            PA = gameObject.AddComponent<PlayerAnimation>();
+            ani = gameObject.AddComponent<PlayerAnimation>();
         }
         #endregion
 
@@ -51,21 +51,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        PA._isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
-        if (PA._isGround)
-        {
-            PA._isFalling = false;
-            PA._isJump = false;
-        }
-        else
-        {
-            PA._isFalling = true;
-        }
-
+        Ground();
         Gravity();
         Jump();
         Move();
+
+        Crouch();
+        mouseInput();
     }
 
 
@@ -80,7 +72,7 @@ public class PlayerController : MonoBehaviour
         if (move == Vector3.zero)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
-            PA._isRunning = false;
+            ani._isRunning = false;
         }
         else
         {
@@ -90,14 +82,14 @@ public class PlayerController : MonoBehaviour
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch) 
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
             else
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
-            PA._isRunning = true;
+            ani._isRunning = true;
         }
 
-        PA._moveSpeed = moveSpeed;
+        ani._moveSpeed = moveSpeed;
     
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
 
@@ -107,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     void Gravity()
     {
-        if (PA._isGround && velocity.y < 0)
+        if (ani._isGround && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -121,15 +113,58 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && PA._isGround)
+        if (Input.GetKeyDown(KeyCode.Space) && ani._isGround)
         {
-            PA._isJump = true;
+            ani._isJump = true;
 
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
 
         }
     }
+    void mouseInput()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            ani._isAim= CurrentAnimationSet(ani._isAim);
+        }
+    }
+
+    void Crouch()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ani._isCrouch = CurrentAnimationSet(ani._isCrouch);
+        }
+    }
+
+    bool CurrentAnimationSet(bool current)
+    {
+        if (!current)
+            current = true;
+        else
+            current = false; 
+
+        return current; 
+    }
+
+    void Ground()
+    {
+        ani._isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);
+
+        if (ani._isGround)
+        {
+            ani._isFalling = false;
+            ani._isJump = false;
+        }
+        else
+        {
+            ani._isFalling = true;
+            ani._isCrouch = false;
+        }
+
+    }
+
 }
 
 
