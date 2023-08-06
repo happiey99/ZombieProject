@@ -30,18 +30,32 @@ public class PlayerAnimation : MonoBehaviour
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
 
 
+    float setCrouchWeight;
+    float setAimWeight;
+
     void Start()
     {
         ani = GetComponent<Animator>();
+
+        Init();
     }
+
+    void Init()
+    {
+        setCrouchWeight = 0;
+        setAimWeight = 0;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
         AnimationState();
-        Aim();
-        Crouch();
+      
+        setCrouchWeight = SetAniLayer(1, isCrouch, setCrouchWeight);
+        setAimWeight = SetAniLayer(2, isAim, setAimWeight);
     }
+
     void AnimationState()
     {
         ani.SetBool("isJump", isJump);
@@ -52,45 +66,20 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetFloat("move", moveSpeed);
     }
 
-    float setCrouchWeight;
-    float setAimWeight;
 
-
-    void Aim()
+    float SetAniLayer(int index, bool condition, float curWeight)
     {
-        if (isAim)
-        {
-            setAimWeight = Mathf.Lerp(setAimWeight, 1, Time.deltaTime * 6.0f);
-        }
+        float value = curWeight;
+
+        if (condition)
+            value = Mathf.Lerp(value, 1, Time.deltaTime * 6.0f);
         else
-        {
-            setAimWeight = Mathf.Lerp(setAimWeight, 0, Time.deltaTime * 6.0f);
+            value = Mathf.Lerp(value, 0, Time.deltaTime * 6.0f);
+        
+        ani.SetLayerWeight(index, value);
 
-        }
-        ani.SetLayerWeight(2, setAimWeight);
+        return value;
     }
-
-    void Crouch()
-    {
-
-       
-
-        if (isCrouch)
-        {
-            setCrouchWeight = Mathf.Lerp(setCrouchWeight, 1, Time.deltaTime * 6.0f);
-        }
-        else
-        {
-            setCrouchWeight = Mathf.Lerp(setCrouchWeight, 0, Time.deltaTime * 6.0f);
-
-        }
-        ani.SetLayerWeight(1, setCrouchWeight);
-
-    }
-
-
-
-
 
 }
 
