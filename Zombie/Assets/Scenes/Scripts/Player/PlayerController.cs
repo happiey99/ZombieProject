@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour
         if (ani._isLadder)
             return;
 
-        //Gravity();
-        Jump();
+       // Gravity();
+        //Jump();
         Move();
         Crouch();
         mouseInput();
