@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+
     #region components
     CharacterController cc;
     PlayerAnimation ani;
     #endregion
-
     #region Gravity
     Vector3 velocity;
 
@@ -52,10 +53,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Ground();
-        Gravity();
+
+        //ray();
+        if (ani._isLadder)
+            return;
+
+        //Gravity();
         Jump();
         Move();
-
         Crouch();
         mouseInput();
     }
@@ -66,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
         float vertical = Input.GetAxis("Vertical");
         float horizental = Input.GetAxis("Horizontal");
-      
+
         Vector3 move = new Vector3(horizental, 0, vertical);
 
         if (move == Vector3.zero)
@@ -82,7 +87,7 @@ public class PlayerController : MonoBehaviour
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
-            if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch) 
+            if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch)
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
             else
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
@@ -90,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
 
         ani._moveSpeed = moveSpeed;
-    
+
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
 
 
@@ -126,7 +131,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            ani._isAim= CurrentAnimationSet(ani._isAim);
+            ani._isAim = CurrentAnimationSet(ani._isAim);
         }
     }
 
@@ -143,9 +148,9 @@ public class PlayerController : MonoBehaviour
         if (!current)
             current = true;
         else
-            current = false; 
+            current = false;
 
-        return current; 
+        return current;
     }
 
     void Ground()
@@ -164,6 +169,32 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+    Ray Aay;
+    void ray()
+    {
+        Aay = new Ray(transform.position, transform.forward);
+
+
+        if (Physics.Raycast(Aay, out RaycastHit hit, 1))
+        {
+
+            ani._isLadder = true;
+
+            float vertical = Input.GetAxis("Vertical");
+            Debug.Log(vertical);
+            Vector3 v = new Vector3(0, vertical, 0);
+
+            cc.Move(v * Time.deltaTime * 10);
+
+        }
+        else
+        {
+            ani._isLadder = false;
+        }
+    }
+
+
+
 
 }
 

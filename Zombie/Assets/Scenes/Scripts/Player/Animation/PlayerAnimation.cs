@@ -17,6 +17,7 @@ public class PlayerAnimation : MonoBehaviour
     bool isCrouch;
     bool isAim;
     bool isFire;
+    bool isLadder;
     float moveSpeed;
 
     public bool _isJump { get { return isJump; } set { isJump = value; } }
@@ -27,6 +28,7 @@ public class PlayerAnimation : MonoBehaviour
     public bool _isCrouch { get { return isCrouch; } set { isCrouch = value; } }
     public bool _isAim { get { return isAim; } set { isAim = value; } }
     public bool _isFire { get { return isFire; } set { isFire = value; } }
+    public bool _isLadder { get { return isLadder; } set { isLadder = value; } }
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
 
 
@@ -51,7 +53,7 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         AnimationState();
-      
+
         setCrouchWeight = SetAniLayer(1, isCrouch, setCrouchWeight);
         setAimWeight = SetAniLayer(2, isAim, setAimWeight);
     }
@@ -63,6 +65,7 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isRunning", isRunning);
         ani.SetBool("isGround", isGround);
         ani.SetBool("isClimbing", isClimbing);
+        ani.SetBool("isLadder", isLadder);
         ani.SetFloat("move", moveSpeed);
     }
 
@@ -75,7 +78,7 @@ public class PlayerAnimation : MonoBehaviour
             value = Mathf.Lerp(value, 1, Time.deltaTime * 6.0f);
         else
             value = Mathf.Lerp(value, 0, Time.deltaTime * 6.0f);
-        
+
         ani.SetLayerWeight(index, value);
 
         return value;
