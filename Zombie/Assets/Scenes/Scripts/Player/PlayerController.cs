@@ -37,11 +37,13 @@ public class PlayerController : MonoBehaviour
         #region GetComponent
         cc = GetComponent<CharacterController>();
 
-        ani = GetComponent<PlayerAnimation>();
-        if (ani == null)
-        {
-            ani = gameObject.AddComponent<PlayerAnimation>();
-        }
+        //ani = GetComponent<PlayerAnimation>();
+        //if (ani == null)
+        //{
+        //    ani = gameObject.AddComponent<PlayerAnimation>();
+        //}
+
+        ani = Extention.GetAddComponent<PlayerAnimation>(this.gameObject);
         #endregion
 
         _camera = Camera.main;
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour
         if (ani._isLadder)
             return;
 
-       // Gravity();
+        //Gravity();
         //Jump();
         Move();
         Crouch();
@@ -73,7 +75,7 @@ public class PlayerController : MonoBehaviour
         float horizental = Input.GetAxis("Horizontal");
 
         Vector3 move = new Vector3(horizental, 0, vertical);
-
+        
         if (move == Vector3.zero)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
@@ -131,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            ani._isAim = CurrentAnimationSet(ani._isAim);
+            ani._isAim = ani.CurrentAnimationSet(ani._isAim);
         }
     }
 
@@ -139,19 +141,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            ani._isCrouch = CurrentAnimationSet(ani._isCrouch);
+            ani._isCrouch = ani.CurrentAnimationSet(ani._isCrouch);
         }
     }
 
-    bool CurrentAnimationSet(bool current)
-    {
-        if (!current)
-            current = true;
-        else
-            current = false;
-
-        return current;
-    }
+    
 
     void Ground()
     {

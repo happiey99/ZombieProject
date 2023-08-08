@@ -38,7 +38,7 @@ public class PlayerAnimation : MonoBehaviour
     void Start()
     {
         ani = GetComponent<Animator>();
-
+        
         Init();
     }
 
@@ -82,6 +82,16 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetLayerWeight(index, value);
 
         return value;
+    }
+
+    public bool CurrentAnimationSet(bool current)
+    {
+        if (!current)
+            current = true;
+        else
+            current = false;
+
+        return current;
     }
 
 }
