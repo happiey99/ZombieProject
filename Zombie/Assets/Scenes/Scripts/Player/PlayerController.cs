@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-
     #region components
     CharacterController cc;
     PlayerAnimation ani;
