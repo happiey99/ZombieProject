@@ -36,12 +36,6 @@ public class PlayerController : MonoBehaviour
         #region GetComponent
         cc = GetComponent<CharacterController>();
 
-        //ani = GetComponent<PlayerAnimation>();
-        //if (ani == null)
-        //{
-        //    ani = gameObject.AddComponent<PlayerAnimation>();
-        //}
-
         ani = Extention.GetAddComponent<PlayerAnimation>(this.gameObject);
         #endregion
 
@@ -53,7 +47,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ground();
+        //Ground();
 
         //ray();
         if (ani._isLadder)
