@@ -38,7 +38,6 @@ public class PlayerAnimation : MonoBehaviour
     void Start()
     {
         ani = GetComponent<Animator>();
-        
         Init();
     }
 
@@ -53,7 +52,6 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         AnimationState();
-
         setCrouchWeight = SetAniLayer(1, isCrouch, setCrouchWeight);
         setAimWeight = SetAniLayer(2, isAim, setAimWeight);
     }

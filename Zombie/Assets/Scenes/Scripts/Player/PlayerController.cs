@@ -5,19 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    #region components
+
     CharacterController cc;
     PlayerAnimation ani;
-    #endregion
-    #region Gravity
+
     Vector3 velocity;
-
     float gravity = -9.8f;
-
-    //bool isGround;
-
     LayerMask groundMask;
-    #endregion
+
 
     float jumpHight = 3f;
 
@@ -26,8 +21,6 @@ public class PlayerController : MonoBehaviour
     float aniSpeed = 10;
 
     Camera _camera;
-
-    Vector3 moveDir;
 
 
 
@@ -47,14 +40,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Ground();
+        Ground();
 
         //ray();
-        if (ani._isLadder)
-            return;
+        //if (ani._isLadder)
+        //    return;
 
-        //Gravity();
-        //Jump();
+        Gravity();
+        Jump();
         Move();
         Crouch();
         mouseInput();
@@ -63,12 +56,13 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        Vector3 moveDir = Vector3.zero;
 
         float vertical = Input.GetAxis("Vertical");
         float horizental = Input.GetAxis("Horizontal");
 
         Vector3 move = new Vector3(horizental, 0, vertical);
-        
+
         if (move == Vector3.zero)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
@@ -91,8 +85,8 @@ public class PlayerController : MonoBehaviour
 
         ani._moveSpeed = moveSpeed;
 
+       // cc.SimpleMove(moveDir * Time.deltaTime * moveSpeed);
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
-
 
     }
 
@@ -137,8 +131,6 @@ public class PlayerController : MonoBehaviour
             ani._isCrouch = ani.CurrentAnimationSet(ani._isCrouch);
         }
     }
-
-    
 
     void Ground()
     {
