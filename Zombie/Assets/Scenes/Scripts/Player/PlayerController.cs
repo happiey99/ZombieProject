@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     Camera _camera;
 
 
+    Transform target;
+
 
     void Awake()
     {
@@ -35,12 +37,19 @@ public class PlayerController : MonoBehaviour
         _camera = Camera.main;
 
         groundMask = LayerMask.GetMask("Ground");
+
+        target = transform.GetChild(3);
     }
 
     // Update is called once per frame
     void Update()
     {
         Ground();
+
+        if (ani._isLadder)
+            return;
+
+
         Gravity();
         Jump();
         Move();
@@ -80,7 +89,14 @@ public class PlayerController : MonoBehaviour
 
         ani._moveSpeed = moveSpeed;
 
-        cc.Move(moveDir * Time.deltaTime * moveSpeed);
+        PlayerMove(moveDir,moveSpeed);
+        //cc.Move(moveDir * Time.deltaTime * moveSpeed);
+
+    }
+
+    public void PlayerMove(Vector3 move, float speed)
+    {
+        cc.Move(move * Time.deltaTime * speed);
 
     }
 
@@ -142,32 +158,43 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
-    Ray Aay;
-    void ray()
-    {
-        Aay = new Ray(transform.position, transform.forward);
-
-
-        if (Physics.Raycast(Aay, out RaycastHit hit, 1))
-        {
-
-            ani._isLadder = true;
-
-            float vertical = Input.GetAxis("Vertical");
-            Debug.Log(vertical);
-            Vector3 v = new Vector3(0, vertical, 0);
-
-            cc.Move(v * Time.deltaTime * 10);
-
-        }
-        else
-        {
-            ani._isLadder = false;
-        }
-    }
-
 }
+//    int ladderLayer;
+
+//    Ray ladderRay;
+//    void CharacterRay()
+//    {
+//        ladderLayer = LayerMask.GetMask("Ladder");
+
+//        ladderRay = new Ray(transform.position+Vector3.up, transform.forward);
+//        bool cast = Physics.Raycast(ladderRay, 1, ladderLayer);
+//        if (cast) 
+//        {
+//            ani._isLadder = true;
+//            ani._moveSpeed = 0;
+
+//            float vertical = Input.GetAxis("Vertical");
+           
+//            Vector3 v = new Vector3(0, vertical, 0);
+
+//            cc.Move(v * Time.deltaTime * 2.5f);
+
+//        }
+//        else
+//        {
+//            ani._isLadder = false;
+//        }
+
+
+//    }
+
+//    private void OnDrawGizmos()
+//    {
+//        Gizmos.color = Color.red;
+//        Gizmos.DrawRay(ladderRay);
+//    }
+
+//}
 
 
 
