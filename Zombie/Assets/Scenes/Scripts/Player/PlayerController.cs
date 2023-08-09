@@ -41,11 +41,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Ground();
-
-        //ray();
-        //if (ani._isLadder)
-        //    return;
-
         Gravity();
         Jump();
         Move();
@@ -85,7 +80,6 @@ public class PlayerController : MonoBehaviour
 
         ani._moveSpeed = moveSpeed;
 
-       // cc.SimpleMove(moveDir * Time.deltaTime * moveSpeed);
         cc.Move(moveDir * Time.deltaTime * moveSpeed);
 
     }
@@ -148,6 +142,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
     Ray Aay;
     void ray()
     {
@@ -171,9 +166,6 @@ public class PlayerController : MonoBehaviour
             ani._isLadder = false;
         }
     }
-
-
-
 
 }
 
