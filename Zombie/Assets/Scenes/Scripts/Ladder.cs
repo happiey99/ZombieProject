@@ -4,37 +4,49 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        PlayerController p = other.GetComponent<PlayerController>();
-        Debug.Log("111");
-        if (p != null) 
-        {
-            PlayerAnimation ani = p.GetComponent<PlayerAnimation>();
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    PlayerController p = other.GetComponent<PlayerController>();
+     
+    //    if (p != null) 
+    //    {
+    //        PlayerAnimation ani = p.GetComponent<PlayerAnimation>();
 
-            ani._isLadder = true;
-            float vertical = Input.GetAxis("Vertical");
-            Vector3 v = new Vector3(0, vertical, 0);
+    //        ani._isLadder = true;
+    //        float vertical = Input.GetAxis("Vertical");
+    //        Vector3 v = new Vector3(0, vertical, 0);
 
-            p.PlayerMove(v, 1.0f);
-        }
-    }
+    //        p.PlayerMove(v, 1.0f);
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    PlayerController p = other.GetComponent<PlayerController>();
+       
+    //    if (p != null)
+    //    {
+    //        PlayerAnimation ani = p.GetComponent<PlayerAnimation>();
+
+         
+
+    //        p.PlayerMove(Vector3.up, 5.0f);
+
+    //        ani._isLadder = false ;
+
+    //    }
+    //}
 
 }

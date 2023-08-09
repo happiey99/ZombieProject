@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -46,11 +47,13 @@ public class PlayerController : MonoBehaviour
     {
         Ground();
 
+        CharacterRay();
+
         if (ani._isLadder)
             return;
 
-
         Gravity();
+
         Jump();
         Move();
         Crouch();
@@ -89,9 +92,7 @@ public class PlayerController : MonoBehaviour
 
         ani._moveSpeed = moveSpeed;
 
-        PlayerMove(moveDir,moveSpeed);
-        //cc.Move(moveDir * Time.deltaTime * moveSpeed);
-
+        PlayerMove(moveDir, moveSpeed);
     }
 
     public void PlayerMove(Vector3 move, float speed)
@@ -158,43 +159,73 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+
+
+    int ladderLayer;
+
+    Ray ladderRay;
+
+    Ray outRay;
+    void CharacterRay()
+    {
+        ladderLayer = LayerMask.GetMask("Ladder");
+
+        ladderRay = new Ray(transform.position, transform.forward);
+
+        outRay = new Ray(transform.position + Vector3.up, transform.forward);
+        
+        RaycastHit ladder;
+
+        bool cast = Physics.Raycast(ladderRay, out ladder, 1, ladderLayer);
+
+
+        if (cast)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                ani._isLadder = true;
+                ani._moveSpeed = 0;
+            }
+
+
+            if (!Physics.Raycast(outRay, 1, ladderLayer))
+            {
+                StartCoroutine(AnimationTime());
+            }
+            else
+            {
+                ani._ladderSpeed = Input.GetAxis("Vertical");
+
+                Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
+
+                cc.Move(v * Time.deltaTime);            
+            }
+        }
+
+    }
+
+   IEnumerator AnimationTime()
+    {
+        ani.LadderF = true;
+
+        yield return new WaitForSeconds(1);
+
+        ani.LadderF = false;
+        ani._isLadder = false;
+ 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawRay(ladderRay);
+        Gizmos.DrawRay(outRay);
+
+    }
+
 }
-//    int ladderLayer;
-
-//    Ray ladderRay;
-//    void CharacterRay()
-//    {
-//        ladderLayer = LayerMask.GetMask("Ladder");
-
-//        ladderRay = new Ray(transform.position+Vector3.up, transform.forward);
-//        bool cast = Physics.Raycast(ladderRay, 1, ladderLayer);
-//        if (cast) 
-//        {
-//            ani._isLadder = true;
-//            ani._moveSpeed = 0;
-
-//            float vertical = Input.GetAxis("Vertical");
-           
-//            Vector3 v = new Vector3(0, vertical, 0);
-
-//            cc.Move(v * Time.deltaTime * 2.5f);
-
-//        }
-//        else
-//        {
-//            ani._isLadder = false;
-//        }
-
-
-//    }
-
-//    private void OnDrawGizmos()
-//    {
-//        Gizmos.color = Color.red;
-//        Gizmos.DrawRay(ladderRay);
-//    }
-
-//}
 
 
 

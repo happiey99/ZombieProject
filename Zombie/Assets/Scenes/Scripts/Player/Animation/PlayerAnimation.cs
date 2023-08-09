@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,7 +9,7 @@ public class PlayerAnimation : MonoBehaviour
 {
 
     Animator ani;
-
+    public bool LadderF;
     bool isJump;
     bool isFalling;
     bool isRunning;
@@ -19,7 +20,7 @@ public class PlayerAnimation : MonoBehaviour
     bool isFire;
     bool isLadder;
     float moveSpeed;
-
+    float ladderSpeed;
     public bool _isJump { get { return isJump; } set { isJump = value; } }
     public bool _isFalling { get { return isFalling; } set { isFalling = value; } }
     public bool _isRunning { get { return isRunning; } set { isRunning = value; } }
@@ -30,7 +31,11 @@ public class PlayerAnimation : MonoBehaviour
     public bool _isFire { get { return isFire; } set { isFire = value; } }
     public bool _isLadder { get { return isLadder; } set { isLadder = value; } }
     public float _moveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
-
+    public float _ladderSpeed
+    {
+        get { return ladderSpeed; }
+        set { ladderSpeed = value; }
+    }
 
     float setCrouchWeight;
     float setAimWeight;
@@ -65,6 +70,8 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isClimbing", isClimbing);
         ani.SetBool("isLadder", isLadder);
         ani.SetFloat("move", moveSpeed);
+        ani.SetFloat("ladderSpeed", ladderSpeed);
+        ani.SetBool("LadderF", LadderF);
     }
 
 
