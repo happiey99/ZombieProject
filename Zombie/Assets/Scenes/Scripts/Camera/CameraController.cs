@@ -5,16 +5,19 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
    
-    public Transform cameraTarget;
+    Transform cameraTarget;
 
     float x = 0;
     float y = 0;
 
     Vector3 cameraOriPosition;
 
+    GameObject player;
 
     void Start()
     {
+        player = GameObject.Find("Player");
+        cameraTarget = player.transform.GetChild(0);
         Cursor.lockState = CursorLockMode.Locked;
         cameraOriPosition = new Vector3(0, 0, -2);
     }
@@ -22,12 +25,16 @@ public class CameraController : MonoBehaviour
  
     void LateUpdate()
     {
+        FollowPlayer();
         Camera.main.transform.LookAt(cameraTarget);
         LookAround();
         MouseWheel();
         CameraRayHitWall();
     }
-
+    void FollowPlayer()
+    {
+        transform.position = cameraTarget.position;
+    }
 
     void LookAround()
     {

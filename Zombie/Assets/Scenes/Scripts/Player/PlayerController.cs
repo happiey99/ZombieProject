@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizental = Input.GetAxis("Horizontal");
 
-        Vector3 move = new Vector3(horizental, 0, vertical);
+        Vector3 move = new Vector3(horizental, 0, vertical).normalized;
 
         if (move == Vector3.zero)
         {
@@ -198,7 +198,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (ani._isLadder)
                 {
-                    //transform.position = Vector3.Lerp(transform.position, ladder.transform.localPosition, 0.7f * Time.deltaTime * 4);
                     cc.Move(ladder.transform.position);
                     ani._ladderSpeed = Input.GetAxis("Vertical");
 
