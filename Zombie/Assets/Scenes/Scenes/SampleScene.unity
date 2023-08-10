@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -236,6 +236,10 @@ PrefabInstance:
     - target: {fileID: 461108739094392549, guid: 1db648e4fc2a342868fddf703f95efd8, type: 3}
       propertyPath: m_Name
       value: Based Gun
+      objectReference: {fileID: 0}
+    - target: {fileID: 461108739094392549, guid: 1db648e4fc2a342868fddf703f95efd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 463116027251139015, guid: 1db648e4fc2a342868fddf703f95efd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1113,8 +1117,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1837534517}
+  m_Children: []
   m_Father: {fileID: 1669354992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &955995566
@@ -1349,6 +1352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbd321ef110b4073a72d2c4b654324c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aimTarget: {fileID: 1837534517}
 --- !u!1 &1837534516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1382,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 955995565}
+  m_Father: {fileID: 7705096501930568458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1900468469
 MonoBehaviour:
@@ -4756,6 +4760,7 @@ Transform:
   - {fileID: 1079447589019096991}
   - {fileID: 47418377}
   - {fileID: 1669354992}
+  - {fileID: 1837534517}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &7705148009236336672

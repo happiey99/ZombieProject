@@ -6,13 +6,12 @@ using UnityEngine.Animations.Rigging;
 public class RigHead : MonoBehaviour
 {
     Rig rig;
-    Transform aimTarget;
+    public Transform aimTarget;
     CameraController cameraTrans;
 
     private void Start()
     {
         rig = GetComponent<Rig>();
-        aimTarget = transform.GetChild(0).GetChild(0).transform;
         cameraTrans = transform.parent.GetComponentInChildren<CameraController>();
     }
     private void LateUpdate()

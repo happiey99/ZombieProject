@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Ground();
-
+      
         CharacterRay();
 
         if (ani._isLadder)
@@ -160,13 +160,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
-
     int ladderLayer;
 
     Ray ladderRay;
 
     Ray outRay;
+
     void CharacterRay()
     {
         ladderLayer = LayerMask.GetMask("Ladder");
@@ -190,7 +189,6 @@ public class PlayerController : MonoBehaviour
                 ani._moveSpeed = 0;
             }
 
-            transform.position = Vector3.Lerp(transform.position, ladder.transform.position + ladder.transform.forward, 0.7f);
 
             if (!Physics.Raycast(outRay, 1, ladderLayer))
             {
@@ -198,20 +196,25 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                ani._ladderSpeed = Input.GetAxis("Vertical");
-
-                Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
-
-                if (ani._ladderSpeed < 0 && ani._isGround)
+                if (ani._isLadder)
                 {
-                    ani.LadderD = true;
-             
+                    //transform.position = Vector3.Lerp(transform.position, ladder.transform.localPosition, 0.7f * Time.deltaTime * 4);
+                    cc.Move(ladder.transform.position);
+                    ani._ladderSpeed = Input.GetAxis("Vertical");
 
-                    ani._isLadder = false;
+                    Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
+
+                    if (ani._ladderSpeed < 0 && ani._isGround)
+                    {
+                        ani.LadderD = true;
+
+                        ani._isLadder = false;
+                    }
+
+
+                    cc.Move(v * Time.deltaTime);
                 }
-
-
-                cc.Move(v * Time.deltaTime);
+               
             }
         }
 
