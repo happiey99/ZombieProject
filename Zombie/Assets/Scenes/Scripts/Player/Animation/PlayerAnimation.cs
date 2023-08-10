@@ -9,7 +9,8 @@ public class PlayerAnimation : MonoBehaviour
 {
 
     Animator ani;
-    public bool LadderF;
+    public bool LadderU;
+    public bool LadderD;
     bool isJump;
     bool isFalling;
     bool isRunning;
@@ -71,7 +72,8 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isLadder", isLadder);
         ani.SetFloat("move", moveSpeed);
         ani.SetFloat("ladderSpeed", ladderSpeed);
-        ani.SetBool("LadderF", LadderF);
+        ani.SetBool("LadderU", LadderU);
+        ani.SetBool("LadderD", LadderD);
     }
 
 

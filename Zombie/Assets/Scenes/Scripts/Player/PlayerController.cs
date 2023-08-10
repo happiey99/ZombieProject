@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
         ladderRay = new Ray(transform.position, transform.forward);
 
         outRay = new Ray(transform.position + Vector3.up, transform.forward);
-        
+
         RaycastHit ladder;
 
         bool cast = Physics.Raycast(ladderRay, out ladder, 1, ladderLayer);
@@ -184,14 +184,17 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                ani.LadderU = false;
+                ani.LadderD = false;
                 ani._isLadder = true;
                 ani._moveSpeed = 0;
             }
 
+            transform.position = Vector3.Lerp(transform.position, ladder.transform.position + ladder.transform.forward, 0.7f);
 
             if (!Physics.Raycast(outRay, 1, ladderLayer))
             {
-                StartCoroutine(AnimationTime());
+                StartCoroutine(LadderUp());
             }
             else
             {
@@ -199,22 +202,31 @@ public class PlayerController : MonoBehaviour
 
                 Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
 
-                cc.Move(v * Time.deltaTime);            
+                if (ani._ladderSpeed < 0 && ani._isGround)
+                {
+                    ani.LadderD = true;
+             
+
+                    ani._isLadder = false;
+                }
+
+
+                cc.Move(v * Time.deltaTime);
             }
         }
 
     }
 
-   IEnumerator AnimationTime()
+    IEnumerator LadderUp()
     {
-        ani.LadderF = true;
+        ani.LadderU = true;
 
         yield return new WaitForSeconds(1);
 
-        ani.LadderF = false;
+        ani.LadderU = false;
         ani._isLadder = false;
- 
     }
+
 
     private void OnDrawGizmos()
     {
