@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -170,9 +171,9 @@ public class PlayerController : MonoBehaviour
     {
         ladderLayer = LayerMask.GetMask("Ladder");
 
-        ladderRay = new Ray(transform.position, transform.forward);
+        ladderRay = new Ray(transform.position, transform.forward- new Vector3(0,0,0.5f));
 
-        outRay = new Ray(transform.position + Vector3.up, transform.forward);
+        outRay = new Ray(transform.position + new Vector3(0,1.5f,0), transform.forward - new Vector3(0, 0, 0.5f));
 
         RaycastHit ladder;
 
@@ -181,12 +182,16 @@ public class PlayerController : MonoBehaviour
 
         if (cast)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKey(KeyCode.W))
             {
                 ani.LadderU = false;
                 ani.LadderD = false;
                 ani._isLadder = true;
                 ani._moveSpeed = 0;
+                cc.enabled = false;
+
+                
+                cc.enabled = true;
             }
 
 
@@ -205,38 +210,37 @@ public class PlayerController : MonoBehaviour
                     if (ani._ladderSpeed < 0 && ani._isGround)
                     {
                         ani.LadderD = true;
-
+                      
                         ani._isLadder = false;
                     }
 
-
                     cc.Move(v * Time.deltaTime);
                 }
-               
             }
         }
 
     }
 
+    
     IEnumerator LadderUp()
     {
         ani.LadderU = true;
 
         yield return new WaitForSeconds(1);
-
+        
         ani.LadderU = false;
         ani._isLadder = false;
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
 
-        Gizmos.DrawRay(ladderRay);
-        Gizmos.DrawRay(outRay);
+    //    Gizmos.DrawRay(ladderRay);
+    //    Gizmos.DrawRay(outRay);
 
-    }
+    //}
 
 }
 
