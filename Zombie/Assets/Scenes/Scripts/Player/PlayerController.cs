@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         Ground();
       
         CharacterRay();
@@ -198,7 +199,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (ani._isLadder)
                 {
-                    cc.Move(ladder.transform.position);
                     ani._ladderSpeed = Input.GetAxis("Vertical");
 
                     Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
