@@ -25,8 +25,9 @@ public class CameraController : MonoBehaviour
  
     void LateUpdate()
     {
-        FollowPlayer();
         Camera.main.transform.LookAt(cameraTarget);
+
+        FollowPlayer();
         LookAround();
         MouseWheel();
         CameraRayHitWall();

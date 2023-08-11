@@ -188,10 +188,6 @@ public class PlayerController : MonoBehaviour
                 ani.LadderD = false;
                 ani._isLadder = true;
                 ani._moveSpeed = 0;
-                cc.enabled = false;
-
-                
-                cc.enabled = true;
             }
 
 

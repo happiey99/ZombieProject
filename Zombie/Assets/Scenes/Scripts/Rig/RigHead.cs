@@ -52,17 +52,14 @@ public class RigHead : MonoBehaviour
 
     void ClampAroundHead()
     {
-
-        if (cameraAim.transform.eulerAngles.y <= 80 &&
-            cameraAim.transform.eulerAngles.y >= 0 ||
-            cameraAim.transform.eulerAngles.y <= 360 &&
-            cameraAim.transform.eulerAngles.y >= 280)
+        if(cameraAim.transform.eulerAngles.y <=80||
+            cameraAim.transform.eulerAngles.y >280)
         {
-            head.weight = Mathf.Lerp(head.weight, 1, Time.deltaTime * 3);
+            head.weight = Mathf.Lerp(head.weight, 1, Time.deltaTime * 7);
         }
         else
         {
-            head.weight = Mathf.Lerp(head.weight, 0, Time.deltaTime * 3);
+            head.weight = Mathf.Lerp(head.weight, 0, Time.deltaTime * 7);
         }
 
     }
@@ -71,35 +68,16 @@ public class RigHead : MonoBehaviour
     {
         if (ani._isAim)
         {
-            body.weight = Mathf.Lerp(body.weight, 1, Time.deltaTime * 3);
-            aim.weight = Mathf.Lerp(aim.weight, 1, Time.deltaTime * 3);
-            secondhand.weight = Mathf.Lerp(secondhand.weight, 1, Time.deltaTime * 3);
+            body.weight = Mathf.Lerp(body.weight, 1, Time.deltaTime * 7);
+            aim.weight = Mathf.Lerp(aim.weight, 1, Time.deltaTime * 7);
+            secondhand.weight = Mathf.Lerp(secondhand.weight, 1, Time.deltaTime * 7);
         }
         else
         {
-            body.weight = Mathf.Lerp(body.weight, 0, Time.deltaTime * 3);
-            aim.weight = Mathf.Lerp(aim.weight, 0, Time.deltaTime * 3);
-            secondhand.weight = Mathf.Lerp(secondhand.weight, 0, Time.deltaTime * 3);
+            body.weight = Mathf.Lerp(body.weight, 0, Time.deltaTime * 7);
+            aim.weight = Mathf.Lerp(aim.weight, 0, Time.deltaTime * 7);
+            secondhand.weight = Mathf.Lerp(secondhand.weight, 0, Time.deltaTime * 7);
         }
     }
-
-
-    //void AimPositioin()
-    //{
-    //    Vector2 midOfS = new Vector2(Screen.width / 2f, Screen.height / 2f);
-
-    //    Ray ray = Camera.main.ScreenPointToRay(midOfS);
-
-    //    RaycastHit[] hits = Physics.RaycastAll(ray);
-
-    //    for (int i = 0; i < hits.Length; i++)
-    //    {
-    //        if (hits[i].transform.gameObject.layer != 6)
-    //        {
-    //            aimTarget.position = hits[i].point;
-    //            break;
-    //        }
-    //    }
-    //}
 
 }
