@@ -46,22 +46,25 @@ public class RigHead : MonoBehaviour
     
     private void LateUpdate()
     {
-        ClampAroundHead();
+        HeadAim();
         AimRig();
     }
 
-    void ClampAroundHead()
+    float maxAngle = 80.0f;
+
+    void HeadAim()
     {
-        if(cameraAim.transform.eulerAngles.y <=80||
-            cameraAim.transform.eulerAngles.y >280)
-        {
-            head.weight = Mathf.Lerp(head.weight, 1, Time.deltaTime * 7);
-        }
-        else
+        Vector3 delta = aimTarget.transform.position - transform.position;
+        float angle = Vector3.Angle(transform.forward, delta);
+
+        if (angle > maxAngle)
         {
             head.weight = Mathf.Lerp(head.weight, 0, Time.deltaTime * 7);
         }
-
+        else
+        {
+            head.weight = Mathf.Lerp(head.weight, 1, Time.deltaTime * 7);
+        }
     }
 
     void AimRig()
