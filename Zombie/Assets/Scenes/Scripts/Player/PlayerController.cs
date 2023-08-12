@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.XR;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour
     PlayerAnimation ani;
 
     Vector3 velocity;
-    float gravity = -9.8f;
+    float gravity = -9.8f * 2;
     LayerMask groundMask;
 
 
@@ -192,7 +193,13 @@ public class PlayerController : MonoBehaviour
         if (inLadder && triggerLadder)
         {
             float v = Input.GetAxis("Vertical");
-            
+          
+            if (ani.LadderDown)
+            {
+                ani._isLadder = true;
+                ani.LadderDown = false;
+            }
+
             if (v < 0)
             {
                 vel = Mathf.Lerp(vel, -1, Time.deltaTime * 7);
@@ -210,12 +217,12 @@ public class PlayerController : MonoBehaviour
             {
                 ani._isLadder = true;      
             }
-            
+          
             if (ani._isLadder)
             {
                 ani._ladderSpeed = vel;
                       
-                if (v < 0 && ani._isGround)
+                if (v < 0 && ani._isGround&&!ani.LadderDown)
                 {
                     ani.LadderD = true;
 
@@ -226,7 +233,7 @@ public class PlayerController : MonoBehaviour
                     ani.LadderD = false;
                 }
 
-                if (!up && v > 0) 
+                if (!up && v > 0 && !ani.LadderDown) 
                 {
                     ani.LadderU = true;
                 }
@@ -239,16 +246,24 @@ public class PlayerController : MonoBehaviour
 
                 cc.Move(((vector) * Time.deltaTime));
             }
+           
         }
-        else
+
+        if (!up && !inLadder && down)
         {
-            ani._isLadder = false;
-            triggerLadder = false;
+            if (Input.GetKey(KeyCode.E))
+            {
+                ani.LadderDown = true;
+            }
         }
+
 
         if (!up && !down && !inLadder)
         {
+           
+            triggerLadder = false;
             ani._isLadder = false;
+            ani.LadderDown = false;
         }
     }
 
@@ -264,79 +279,7 @@ public class PlayerController : MonoBehaviour
     //}
 
 
-    #region 사다리 첫번#
-    //int ladderLayer;
-
-    //Ray ladderRay;
-
-    //Ray outRay;
-
-    //void CharacterRay()
-    //{
-    //    ladderLayer = LayerMask.GetMask("Ladder");
-
-    //    ladderRay = new Ray(transform.position, transform.forward- new Vector3(0,0,0.5f));
-
-    //    outRay = new Ray(transform.position + new Vector3(0,1.5f,0), transform.forward - new Vector3(0, 0, 0.5f));
-
-    //    RaycastHit ladder;
-
-    //    bool cast = Physics.Raycast(ladderRay, out ladder, 1, ladderLayer);
-
-
-    //    if (cast)
-    //    {
-    //        if (Input.GetKey(KeyCode.W))
-    //        {
-    //            ani.LadderU = false;
-    //            ani.LadderD = false;
-    //            ani._isLadder = true;
-    //            ani._moveSpeed = 0;
-    //        }
-
-
-    //        if (!Physics.Raycast(outRay, 1, ladderLayer))
-    //        {
-    //            StartCoroutine(LadderUp());
-    //        }
-    //        else
-    //        {
-    //            if (ani._isLadder)
-    //            {
-    //                ani._ladderSpeed = Input.GetAxis("Vertical");
-
-    //                Vector3 v = new Vector3(0, ani._ladderSpeed, 0);
-
-    //                if (ani._ladderSpeed < 0 && ani._isGround)
-    //                {
-    //                    ani.LadderD = true;
-
-    //                    ani._isLadder = false;
-    //                }
-
-    //                cc.Move(v * Time.deltaTime);
-    //            }
-    //        }
-    //    }
-
-
-
-    //}
-
-
-    //IEnumerator LadderUp()
-    //{
-    //    ani.LadderU = true;
-
-    //    yield return new WaitForSeconds(1);
-
-    //    ani.LadderU = false;
-    //    ani._isLadder = false;
-    //}
-
-
-
-    #endregion
+    
 
 }
 

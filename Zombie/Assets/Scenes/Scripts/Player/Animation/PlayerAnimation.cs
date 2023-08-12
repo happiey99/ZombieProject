@@ -11,6 +11,7 @@ public class PlayerAnimation : MonoBehaviour
     Animator ani;
     public bool LadderU;
     public bool LadderD;
+    public bool LadderDown;
     bool isJump;
     bool isFalling;
     bool isRunning;
@@ -74,6 +75,7 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetFloat("ladderSpeed", ladderSpeed);
         ani.SetBool("LadderU", LadderU);
         ani.SetBool("LadderD", LadderD);
+        ani.SetBool("LadderDown",LadderDown);
     }
 
 
