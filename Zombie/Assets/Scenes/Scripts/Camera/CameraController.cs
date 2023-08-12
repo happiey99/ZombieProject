@@ -23,20 +23,22 @@ public class CameraController : MonoBehaviour
     }
 
  
-    void LateUpdate()
+    void Update()
     {
-        Camera.main.transform.LookAt(cameraTarget);
-
-        FollowPlayer();
         LookAround();
         MouseWheel();
         CameraRayHitWall();
     }
-    void FollowPlayer()
+    private void LateUpdate()
     {
-        transform.position = cameraTarget.position;
-    }
+        Camera.main.transform.LookAt(cameraTarget);
 
+        transform.position =
+            Vector3.Lerp(transform.position, cameraTarget.position, Time.deltaTime * 10);
+    
+    }
+  
+        
     void LookAround()
     {
         x += Input.GetAxis("Mouse X");

@@ -52,15 +52,16 @@ public class PlayerController : MonoBehaviour
 
         if (ani._isLadder)
             return;
+        Move();
 
         Gravity();
 
         Jump();
-        Move();
+
         Crouch();
         mouseInput();
     }
-
+   
 
     void Move()
     {
@@ -160,14 +161,23 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+    Ray Ladder;
+
+    Ray LadderUpLay;
+
+    Ray LadderDownLay;
+   
+    public bool triggerLadder;
+
+    float vel;
 
     void RayCast()
     {
-        Ray Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
+       Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
 
-        Ray LadderUpLay = new Ray(transform.position + new Vector3(0, 1.5f, 0), transform.forward);
-        
-        Ray LadderDownLay = new Ray(transform.position, transform.forward);
+       LadderUpLay = new Ray(transform.position + new Vector3(0, 1.5f, 0), transform.forward);
+       
+       LadderDownLay = new Ray(transform.position, transform.forward);
 
         LayerMask layerMask = LayerMask.GetMask("Ladder");
 
@@ -179,10 +189,22 @@ public class PlayerController : MonoBehaviour
 
         bool inLadder = Physics.Raycast(Ladder, out hit, 0.5f, layerMask);
 
-        if (inLadder)
+        if (inLadder && triggerLadder)
         {
-          
             float v = Input.GetAxis("Vertical");
+            
+            if (v < 0)
+            {
+                vel = Mathf.Lerp(vel, -1, Time.deltaTime * 7);
+            } 
+            else if (v > 0)
+            {
+                vel = Mathf.Lerp(vel, 1, Time.deltaTime * 7);
+            }
+            else
+            {
+                vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
+            }
 
             if (v > 0)
             {
@@ -191,10 +213,8 @@ public class PlayerController : MonoBehaviour
             
             if (ani._isLadder)
             {
-                ani._ladderSpeed = v;
-                float velocity = 1;
-                Vector3 vector = new Vector3(0, v, 0);
-
+                ani._ladderSpeed = vel;
+                      
                 if (v < 0 && ani._isGround)
                 {
                     ani.LadderD = true;
@@ -209,25 +229,39 @@ public class PlayerController : MonoBehaviour
                 if (!up && v > 0) 
                 {
                     ani.LadderU = true;
-                    velocity = 2;
                 }
                 else
                 {
                     ani.LadderU = false;
-                    velocity = 1;
                 }
+                
+                Vector3 vector = new Vector3(0, vel, 0);
 
-                cc.Move(vector * Time.deltaTime * velocity);
+                cc.Move(((vector) * Time.deltaTime));
             }
         }
         else
         {
             ani._isLadder = false;
+            triggerLadder = false;
         }
-    
+
+        if (!up && !down && !inLadder)
+        {
+            ani._isLadder = false;
+        }
     }
 
-   
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+
+    //    Gizmos.DrawRay(Ladder);
+    //    Gizmos.DrawRay(LadderUpLay);
+    //    Gizmos.DrawRay(LadderDownLay);
+
+
+    //}
 
 
     #region 사다리 첫번#
@@ -301,14 +335,7 @@ public class PlayerController : MonoBehaviour
     //}
 
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
 
-    //    Gizmos.DrawRay(ladderRay);
-    //    Gizmos.DrawRay(outRay);
-
-    //}
     #endregion
 
 }
