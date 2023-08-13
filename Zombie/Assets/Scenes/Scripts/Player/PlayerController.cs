@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         Crouch();
         mouseInput();
     }
-   
+
 
     void Move()
     {
@@ -167,18 +167,18 @@ public class PlayerController : MonoBehaviour
     Ray LadderUpLay;
 
     Ray LadderDownLay;
-   
+
     public bool triggerLadder;
 
     float vel;
 
     void RayCast()
     {
-       Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
+        Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
 
-       LadderUpLay = new Ray(transform.position + new Vector3(0, 1.5f, 0), transform.forward);
-       
-       LadderDownLay = new Ray(transform.position, transform.forward);
+        LadderUpLay = new Ray(transform.position + new Vector3(0, 1.5f, 0), transform.forward);
+
+        LadderDownLay = new Ray(transform.position, transform.forward);
 
         LayerMask layerMask = LayerMask.GetMask("Ladder");
 
@@ -190,20 +190,19 @@ public class PlayerController : MonoBehaviour
 
         bool inLadder = Physics.Raycast(Ladder, out hit, 0.5f, layerMask);
 
+        if (!inLadder && down && Input.GetKey(KeyCode.E))
+        {
+            ani.LadderDown = true;
+        }
+
         if (inLadder && triggerLadder)
         {
             float v = Input.GetAxis("Vertical");
-          
-            if (ani.LadderDown)
-            {
-                ani._isLadder = true;
-                ani.LadderDown = false;
-            }
 
             if (v < 0)
             {
                 vel = Mathf.Lerp(vel, -1, Time.deltaTime * 7);
-            } 
+            }
             else if (v > 0)
             {
                 vel = Mathf.Lerp(vel, 1, Time.deltaTime * 7);
@@ -213,27 +212,29 @@ public class PlayerController : MonoBehaviour
                 vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
             }
 
-            if (v > 0)
+            if (v > 0 || down)
             {
-                ani._isLadder = true;      
+                ani._isLadder = true;
             }
-          
+
             if (ani._isLadder)
             {
                 ani._ladderSpeed = vel;
-                      
-                if (v < 0 && ani._isGround&&!ani.LadderDown)
-                {
-                    ani.LadderD = true;
 
-                    ani._isLadder = false;
+                if (v < 0)
+                {
+                    if (ani._isGround && !ani.LadderDown)
+                    {
+                        ani.LadderD = true;
+                        ani._isLadder = false;
+                    }
                 }
                 else
                 {
                     ani.LadderD = false;
                 }
 
-                if (!up && v > 0 && !ani.LadderDown) 
+                if (!up && v > 0 && !ani.LadderDown)
                 {
                     ani.LadderU = true;
                 }
@@ -241,26 +242,25 @@ public class PlayerController : MonoBehaviour
                 {
                     ani.LadderU = false;
                 }
-                
+
                 Vector3 vector = new Vector3(0, vel, 0);
 
                 cc.Move(((vector) * Time.deltaTime));
             }
-           
+
         }
 
-        if (!up && !inLadder && down)
-        {
-            if (Input.GetKey(KeyCode.E))
-            {
-                ani.LadderDown = true;
-            }
-        }
+        //if (!up && !inLadder && down)
+        //{
+        //    if (Input.GetKey(KeyCode.E))
+        //    {
+        //        ani.LadderDown = true;
+        //    }
+        //}
 
 
         if (!up && !down && !inLadder)
         {
-           
             triggerLadder = false;
             ani._isLadder = false;
             ani.LadderDown = false;
@@ -279,7 +279,7 @@ public class PlayerController : MonoBehaviour
     //}
 
 
-    
+
 
 }
 
