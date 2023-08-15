@@ -168,9 +168,7 @@ public class PlayerController : MonoBehaviour
 
     Ray LadderDownLay;
 
-    public bool triggerLadder;
-
-    float vel;
+    Ray Obstcale;
 
     void RayCast()
     {
@@ -180,15 +178,24 @@ public class PlayerController : MonoBehaviour
 
         LadderDownLay = new Ray(transform.position, transform.forward);
 
+        LadderSystem();    
+    }
+
+    public bool triggerLadder = false;
+
+    float vel;
+
+    void LadderSystem()
+    {
         LayerMask layerMask = LayerMask.GetMask("Ladder");
 
-        RaycastHit hit;
+        //RaycastHit hit;
 
-        bool up = Physics.Raycast(LadderUpLay, out hit, 0.5f, layerMask);
+        bool up = Physics.Raycast(LadderUpLay, 0.5f, layerMask);
 
-        bool down = Physics.Raycast(LadderDownLay, out hit, 0.5f, layerMask);
+        bool down = Physics.Raycast(LadderDownLay, 0.5f, layerMask);
 
-        bool inLadder = Physics.Raycast(Ladder, out hit, 0.5f, layerMask);
+        bool inLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
 
         if (!inLadder && down && Input.GetKey(KeyCode.E))
         {
@@ -212,7 +219,7 @@ public class PlayerController : MonoBehaviour
                 vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
             }
 
-            if (v > 0 || down)
+            if (v > 0 ||down)
             {
                 ani._isLadder = true;
             }
@@ -250,14 +257,6 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        //if (!up && !inLadder && down)
-        //{
-        //    if (Input.GetKey(KeyCode.E))
-        //    {
-        //        ani.LadderDown = true;
-        //    }
-        //}
-
 
         if (!up && !down && !inLadder)
         {
@@ -267,16 +266,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
 
-    //    Gizmos.DrawRay(Ladder);
-    //    Gizmos.DrawRay(LadderUpLay);
-    //    Gizmos.DrawRay(LadderDownLay);
-
-
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(Ladder);
+        Gizmos.DrawRay(LadderUpLay);
+        Gizmos.DrawRay(LadderDownLay);
+        Gizmos.DrawRay(Obstcale);
+    }
 
 
 
