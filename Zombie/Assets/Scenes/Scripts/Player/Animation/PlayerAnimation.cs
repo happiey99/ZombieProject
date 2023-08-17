@@ -12,21 +12,26 @@ public class PlayerAnimation : MonoBehaviour
     public bool LadderU;
     public bool LadderD;
     public bool LadderDown;
+
     bool isJump;
+
     bool isFalling;
+
     bool isRunning;
-    bool isClimbing;
+
     bool isGround;
+
     bool isCrouch;
+
     bool isAim;
     bool isFire;
+
     bool isLadder;
     float moveSpeed;
     float ladderSpeed;
     public bool _isJump { get { return isJump; } set { isJump = value; } }
     public bool _isFalling { get { return isFalling; } set { isFalling = value; } }
     public bool _isRunning { get { return isRunning; } set { isRunning = value; } }
-    public bool _isClimbing { get { return isClimbing; } set { isClimbing = value; } }
     public bool _isGround { get { return isGround; } set { isGround = value; } }
     public bool _isCrouch { get { return isCrouch; } set { isCrouch = value; } }
     public bool _isAim { get { return isAim; } set { isAim = value; } }
@@ -69,7 +74,6 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isFalling", isFalling);
         ani.SetBool("isRunning", isRunning);
         ani.SetBool("isGround", isGround);
-        ani.SetBool("isClimbing", isClimbing);
         ani.SetBool("isLadder", isLadder);
         ani.SetFloat("move", moveSpeed);
         ani.SetFloat("ladderSpeed", ladderSpeed);

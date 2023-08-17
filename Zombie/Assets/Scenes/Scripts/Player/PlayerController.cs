@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     float gravity = -9.8f * 2;
     LayerMask groundMask;
 
+    Transform aimTarget;
 
     float jumpHight = 3f;
 
@@ -38,21 +39,24 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         //_camera = Camera.main;
-
+        aimTarget = Camera.main.transform.parent.GetChild(0);
         groundMask = LayerMask.GetMask("Ground");
 
         //target = transform.GetChild(3);
     }
 
     // Update is called once per frame
+    playerState p;
     void Update()
     {
+
         Ground();
 
         RayCast();
 
         if (ani._isLadder)
             return;
+
         Move();
 
         Gravity();
@@ -61,8 +65,39 @@ public class PlayerController : MonoBehaviour
 
         Crouch();
         mouseInput();
+
+        // switchMotions();
+
     }
 
+    void switchMotions()
+    {
+        switch (Managers._playerState.GetPlayerState())
+        {
+            case playerState.idle:
+                Debug.Log(1);
+                break;
+            case playerState.move:
+                Debug.Log(1);
+                break;
+            case playerState.fall:
+                Debug.Log(1);
+                break;
+            case playerState.jump:
+                Debug.Log(1);
+                break;
+            case playerState.crouch:
+                Debug.Log(1);
+                break;
+            case playerState.aim:
+                Debug.Log(1);
+                break;
+            case playerState.ladder:
+                Debug.Log(1);
+                break;
+
+        }
+    }
 
     void Move()
     {
@@ -85,12 +120,20 @@ public class PlayerController : MonoBehaviour
 
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
+
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
             if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch)
+            {
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
+                ani._isRunning = true;
+            }
             else
+            {
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
-            ani._isRunning = true;
+                ani._isRunning = false;
+            }
+
+
         }
 
         ani._moveSpeed = moveSpeed;
@@ -101,7 +144,6 @@ public class PlayerController : MonoBehaviour
     public void PlayerMove(Vector3 move, float speed)
     {
         cc.Move(move * Time.deltaTime * speed);
-
     }
 
 
@@ -127,7 +169,6 @@ public class PlayerController : MonoBehaviour
 
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
-
         }
     }
     void mouseInput()
@@ -143,6 +184,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             ani._isCrouch = ani.CurrentAnimationSet(ani._isCrouch);
+
         }
     }
 
@@ -162,6 +204,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
     Ray Ladder;
 
     Ray LadderUpLay;
@@ -178,7 +221,7 @@ public class PlayerController : MonoBehaviour
 
         LadderDownLay = new Ray(transform.position, transform.forward);
 
-        LadderSystem();    
+        LadderSystem();
     }
 
     public bool triggerLadder = false;
@@ -204,6 +247,7 @@ public class PlayerController : MonoBehaviour
 
         if (inLadder && triggerLadder)
         {
+
             float v = Input.GetAxis("Vertical");
 
             if (v < 0)
@@ -219,7 +263,7 @@ public class PlayerController : MonoBehaviour
                 vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
             }
 
-            if (v > 0 ||down)
+            if (v > 0 || down)
             {
                 ani._isLadder = true;
             }

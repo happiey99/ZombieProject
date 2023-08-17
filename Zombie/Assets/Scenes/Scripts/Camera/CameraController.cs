@@ -14,12 +14,16 @@ public class CameraController : MonoBehaviour
 
     GameObject player;
 
+    Transform lookHere;
+
     void Start()
     {
         player = GameObject.Find("Player");
         cameraTarget = player.transform.GetChild(0);
+
         Cursor.lockState = CursorLockMode.Locked;
         cameraOriPosition = new Vector3(0, 0, -2);
+        lookHere = transform.GetChild(1);
     }
 
  
@@ -31,7 +35,7 @@ public class CameraController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        Camera.main.transform.LookAt(cameraTarget);
+        Camera.main.transform.LookAt(lookHere);
 
         transform.position = cameraTarget.position;
 
