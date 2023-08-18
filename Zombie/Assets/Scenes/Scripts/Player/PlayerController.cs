@@ -120,8 +120,9 @@ public class PlayerController : MonoBehaviour
 
             moveDir = (lookForward * move.z) + (lookRight * move.x);
 
+            if (!ani._isAim)
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
             if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch)
             {
                 moveSpeed = Mathf.Lerp(moveSpeed, 4, aniSpeed * Time.deltaTime);
@@ -267,7 +268,7 @@ public class PlayerController : MonoBehaviour
             if (v > 0 || down || ani.LadderDown)
             {
                 ani._isLadder = true;
-             
+
             }
 
             if (ani._isLadder)
@@ -313,14 +314,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(Ladder);
-        Gizmos.DrawRay(LadderUpLay);
-        Gizmos.DrawRay(LadderDownLay);
-        Gizmos.DrawRay(Obstcale);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawRay(Ladder);
+    //    Gizmos.DrawRay(LadderUpLay);
+    //    Gizmos.DrawRay(LadderDownLay);
+    //    Gizmos.DrawRay(Obstcale);
+    //}
 
 
 
