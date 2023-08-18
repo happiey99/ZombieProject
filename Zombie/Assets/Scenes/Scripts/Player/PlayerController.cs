@@ -70,34 +70,34 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void switchMotions()
-    {
-        switch (Managers._playerState.GetPlayerState())
-        {
-            case playerState.idle:
-                Debug.Log(1);
-                break;
-            case playerState.move:
-                Debug.Log(1);
-                break;
-            case playerState.fall:
-                Debug.Log(1);
-                break;
-            case playerState.jump:
-                Debug.Log(1);
-                break;
-            case playerState.crouch:
-                Debug.Log(1);
-                break;
-            case playerState.aim:
-                Debug.Log(1);
-                break;
-            case playerState.ladder:
-                Debug.Log(1);
-                break;
+    //void switchMotions()
+    //{
+    //    switch (Managers._playerState.GetPlayerState())
+    //    {
+    //        case playerState.idle:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.move:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.fall:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.jump:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.crouch:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.aim:
+    //            Debug.Log(1);
+    //            break;
+    //        case playerState.ladder:
+    //            Debug.Log(1);
+    //            break;
 
-        }
-    }
+    //    }
+    //}
 
     void Move()
     {
@@ -228,21 +228,32 @@ public class PlayerController : MonoBehaviour
 
     float vel;
 
+
     void LadderSystem()
     {
         LayerMask layerMask = LayerMask.GetMask("Ladder");
 
-        //RaycastHit hit;
+        RaycastHit ladder;
 
         bool up = Physics.Raycast(LadderUpLay, 0.5f, layerMask);
 
-        bool down = Physics.Raycast(LadderDownLay, 0.5f, layerMask);
+        bool down = Physics.Raycast(LadderDownLay, out ladder, 0.5f, layerMask);
 
         bool inLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
 
         if (!inLadder && down && Input.GetKey(KeyCode.E))
         {
             ani.LadderDown = true;
+            cc.enabled = false;
+
+            transform.position = new Vector3(
+                ladder.transform.localPosition.x
+                , transform.position.y
+                , ladder.transform.localPosition.z);
+
+            cc.enabled = true;
+            //ani._isLadder = true;
+
         }
 
         if (inLadder && triggerLadder)
@@ -263,7 +274,7 @@ public class PlayerController : MonoBehaviour
                 vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
             }
 
-            if (v > 0 || down)
+            if (v > 0 || down || ani.LadderDown)
             {
                 ani._isLadder = true;
             }
