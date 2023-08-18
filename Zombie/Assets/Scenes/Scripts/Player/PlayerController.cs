@@ -244,19 +244,9 @@ public class PlayerController : MonoBehaviour
         if (!inLadder && down && Input.GetKey(KeyCode.E))
         {
             ani.LadderDown = true;
-            cc.enabled = false;
-
-            transform.position = new Vector3(
-                ladder.transform.localPosition.x
-                , transform.position.y
-                , ladder.transform.localPosition.z);
-
-            cc.enabled = true;
-            //ani._isLadder = true;
-
         }
 
-        if (inLadder && triggerLadder)
+        if (inLadder)
         {
 
             float v = Input.GetAxis("Vertical");
@@ -277,6 +267,7 @@ public class PlayerController : MonoBehaviour
             if (v > 0 || down || ani.LadderDown)
             {
                 ani._isLadder = true;
+             
             }
 
             if (ani._isLadder)
