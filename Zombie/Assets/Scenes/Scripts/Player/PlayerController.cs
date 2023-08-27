@@ -212,8 +212,6 @@ public class PlayerController : MonoBehaviour
 
     Ray LadderDownLay;
 
-    Ray Obstcale;
-
     void RayCast()
     {
         Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
@@ -225,10 +223,7 @@ public class PlayerController : MonoBehaviour
         LadderSystem();
     }
 
-    public bool triggerLadder = false;
-
     float vel;
-
 
     void LadderSystem()
     {
@@ -236,20 +231,22 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit ladder;
 
+
+
         bool up = Physics.Raycast(LadderUpLay, 0.5f, layerMask);
 
-        bool down = Physics.Raycast(LadderDownLay, out ladder, 0.5f, layerMask);
+        bool down = Physics.Raycast(LadderDownLay, out ladder, 1, layerMask);
 
         bool inLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
 
         if (!inLadder && down && Input.GetKey(KeyCode.E))
         {
             ani.LadderDown = true;
+
         }
 
         if (inLadder)
         {
-
             float v = Input.GetAxis("Vertical");
 
             if (v < 0)
@@ -307,11 +304,48 @@ public class PlayerController : MonoBehaviour
 
         if (!up && !down && !inLadder)
         {
-            triggerLadder = false;
             ani._isLadder = false;
             ani.LadderDown = false;
         }
     }
+
+    //float ladderLerpValue = 0;
+    //void LadderEnter()
+    //{
+    //    LayerMask layerMask = LayerMask.GetMask("Ladder");
+
+    //    RaycastHit ladder;
+
+    //    Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
+
+    //    bool inLadder = Physics.Raycast(Ladder, out ladder, 0.5f, layerMask);
+
+    //    if (inLadder)
+    //    {
+    //        float v = Input.GetAxis("Vertical");
+
+    //        if (v > 0)
+    //        {
+    //            ladderLerpValue = Mathf.Lerp(ladderLerpValue, 1, Time.deltaTime * 7);
+    //        }
+    //        else if (v < 0)
+    //        {
+    //            ladderLerpValue = Mathf.Lerp(ladderLerpValue, -1, Time.deltaTime * 7);
+    //        }
+    //        else
+    //        {
+    //            ladderLerpValue = Mathf.Lerp(ladderLerpValue, 0, Time.deltaTime * 7);
+    //        }
+
+    //        if (!ani._isLadder)
+    //        {
+    //            ani._isLadder = true;
+    //        }
+
+    //        Vector3 ladderVector = new Vector3(0, ladderLerpValue, 0);
+
+    //        cc.Move(ladderVector * Time.deltaTime);
+    //    }
 
 
     //private void OnDrawGizmos()
@@ -323,10 +357,10 @@ public class PlayerController : MonoBehaviour
     //    Gizmos.DrawRay(Obstcale);
     //}
 
-
-
-
 }
+
+
+
 
 
 
