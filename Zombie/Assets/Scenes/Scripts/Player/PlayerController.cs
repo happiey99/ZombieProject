@@ -24,11 +24,6 @@ public class PlayerController : MonoBehaviour
 
     float aniSpeed = 10;
 
-    //Camera _camera;
-
-
-    //Transform target;
-
 
     void Awake()
     {
@@ -38,11 +33,9 @@ public class PlayerController : MonoBehaviour
         ani = Extention.GetAddComponent<PlayerAnimation>(this.gameObject);
         #endregion
 
-        //_camera = Camera.main;
         aimTarget = Camera.main.transform.parent.GetChild(0);
         groundMask = LayerMask.GetMask("Ground");
 
-        //target = transform.GetChild(3);
     }
 
     // Update is called once per frame
@@ -66,38 +59,7 @@ public class PlayerController : MonoBehaviour
         Crouch();
         mouseInput();
 
-        // switchMotions();
-
     }
-
-    //void switchMotions()
-    //{
-    //    switch (Managers._playerState.GetPlayerState())
-    //    {
-    //        case playerState.idle:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.move:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.fall:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.jump:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.crouch:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.aim:
-    //            Debug.Log(1);
-    //            break;
-    //        case playerState.ladder:
-    //            Debug.Log(1);
-    //            break;
-
-    //    }
-    //}
 
     void Move()
     {
@@ -206,166 +168,98 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //Ray Ladder;
 
-    ////Ray LadderUpLay;
-
-    //Ray LadderDownLay;
-
+    float vel;
     void RayCast()
     {
         Ray Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
         Ray LadderUpRay = new Ray(transform.position + new Vector3(0, 1.5f, 0), transform.forward);
         Ray LadderDownRay = new Ray(transform.position, transform.forward);
 
-        LadderIn(Ladder, LadderUpRay, LadderDownRay);
-    }
 
-    float lerpValue;
-    void LadderIn(Ray Ladder, Ray upRay, Ray downRay)
-    {
         LayerMask layerMask = LayerMask.GetMask("Ladder");
 
-        bool InLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
+        RaycastHit ladder;
 
-        bool LadderDownRay = Physics.Raycast(downRay, 0.5f, layerMask);
 
-        bool up = Physics.Raycast(upRay, 0.5f, layerMask);
+        bool up = Physics.Raycast(LadderUpRay, 0.5f, layerMask);
 
-        float vertical = Input.GetAxis("Vertical");
+        bool down = Physics.Raycast(LadderDownRay, out ladder, 1, layerMask);
 
-        Vector2 ladderVector = Vector3.zero;
+        bool inLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
 
-        if (InLadder)
+        if (!inLadder && down && Input.GetKey(KeyCode.E))
         {
-            if (vertical > 0)
-            {
-                if (!ani._isLadder && up)
-                    ani._isLadder = true;
-
-                if (!up)
-                    ani._isLadder = false;
-
-                //lerpValue = Mathf.Lerp(vertical, 1, Time.deltaTime * 7);
-            }
-            else if (vertical < 0)
-            {
-                if (!ani._isLadder && LadderDownRay)
-                    ani._isLadder = true;
-
-                if (ani._isGround)
-                    ani._isLadder = false;
-
-                //lerpValue = Mathf.Lerp(vertical, -1, Time.deltaTime * 7);
-            }
-
-
-            //ladderVector = new Vector3(0, lerpValue, 0);
+            ani.LadderDown = true;
 
         }
-        //if (vertical == 0)
-        //{
-        //lerpValue = Mathf.Lerp(vertical, 0, Time.deltaTime * 7);
-        //}
-        ladderVector = new Vector3(0, vertical, 0);
-        ani._ladderSpeed = vertical;
-        cc.Move(ladderVector * Time.deltaTime);
+
+        if (inLadder)
+        {
+            float v = Input.GetAxis("Vertical");
+
+            if (v < 0)
+            {
+                vel = Mathf.Lerp(vel, -1, Time.deltaTime * 7);
+            }
+            else if (v > 0)
+            {
+                vel = Mathf.Lerp(vel, 1, Time.deltaTime * 7);
+            }
+            else
+            {
+                vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
+            }
+
+            if (v > 0 || down || ani.LadderDown)
+            {
+                ani._isLadder = true;
+
+            }
+
+            if (ani._isLadder)
+            {
+                ani._ladderSpeed = vel;
+
+                if (v < 0)
+                {
+                    if (ani._isGround && !ani.LadderDown)
+                    {
+                        ani.LadderD = true;
+                        ani._isLadder = false;
+                    }
+                }
+                else
+                {
+                    ani.LadderD = false;
+                }
+
+                if (!up && v > 0 && !ani.LadderDown)
+                {
+                    ani.LadderU = true;
+                }
+                else
+                {
+                    ani.LadderU = false;
+                }
+
+                Vector3 vector = new Vector3(0, vel, 0);
+
+                cc.Move(((vector) * Time.deltaTime));
+            }
+
+        }
+
+
+        if (!up && !down && !inLadder)
+        {
+            ani._isLadder = false;
+            ani.LadderDown = false;
+
+        }
+
     }
 
-
-    //void LadderSystem()
-    //{
-    //    LayerMask layerMask = LayerMask.GetMask("Ladder");
-
-    //    RaycastHit ladder;
-
-
-
-    //    bool up = Physics.Raycast(LadderUpLay, 0.5f, layerMask);
-
-    //    bool down = Physics.Raycast(LadderDownLay, out ladder, 1, layerMask);
-
-    //    bool inLadder = Physics.Raycast(Ladder, 0.5f, layerMask);
-
-    //    if (!inLadder && down && Input.GetKey(KeyCode.E))
-    //    {
-    //        ani.LadderDown = true;
-
-    //    }
-
-    //    if (inLadder)
-    //    {
-    //        float v = Input.GetAxis("Vertical");
-
-    //        if (v < 0)
-    //        {
-    //            vel = Mathf.Lerp(vel, -1, Time.deltaTime * 7);
-    //        }
-    //        else if (v > 0)
-    //        {
-    //            vel = Mathf.Lerp(vel, 1, Time.deltaTime * 7);
-    //        }
-    //        else
-    //        {
-    //            vel = Mathf.Lerp(vel, 0, Time.deltaTime * 7);
-    //        }
-
-    //        if (v > 0 || down || ani.LadderDown)
-    //        {
-    //            ani._isLadder = true;
-
-    //        }
-
-    //        if (ani._isLadder)
-    //        {
-    //            ani._ladderSpeed = vel;
-
-    //            if (v < 0)
-    //            {
-    //                if (ani._isGround && !ani.LadderDown)
-    //                {
-    //                    ani.LadderD = true;
-    //                    ani._isLadder = false;
-    //                }
-    //            }
-    //            else
-    //            {
-    //                ani.LadderD = false;
-    //            }
-
-    //            if (!up && v > 0 && !ani.LadderDown)
-    //            {
-    //                ani.LadderU = true;
-    //            }
-    //            else
-    //            {
-    //                ani.LadderU = false;
-    //            }
-
-    //            Vector3 vector = new Vector3(0, vel, 0);
-
-    //            cc.Move(((vector) * Time.deltaTime));
-    //        }
-
-    //    }
-
-
-    //    if (!up && !down && !inLadder)
-    //    {
-    //        ani._isLadder = false;
-    //        ani.LadderDown = false;
-    //    }
-    //}
-
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawRay(Ladder);
-    //    Gizmos.DrawRay(LadderUpLay);
-    //    Gizmos.DrawRay(LadderDownLay);
-    //    Gizmos.DrawRay(Obstcale);
-    //}
 
 }
 
