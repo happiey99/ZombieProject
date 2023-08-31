@@ -45,8 +45,8 @@ public class PlayerController : MonoBehaviour
 
         Ground();
 
-        RayCast();
-
+        //RayCast();
+        RayCast1();
         if (ani._isLadder)
             return;
 
@@ -169,7 +169,45 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    void RayCast1()
+    {
+        Ray ray = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
+
+        LayerMask layerMask = LayerMask.GetMask("Ladder");
+
+        RaycastHit ladder;
+
+
+        bool hit = Physics.Raycast(ray, out ladder, 0.5f, layerMask);
+
+        if (hit)
+        {
+            float vertical = Input.GetAxis("Vertical");
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                StartCoroutine(StopMove(ladder));
+            }
+            
+        }
+    }
+
+
+    
+    IEnumerator StopMove(RaycastHit obj)
+    {
+
+        ani._isLadder = true;
+        cc.enabled = false;
+        transform.position = Vector3.Lerp(transform.position, obj.transform.position + obj.transform.forward * -1*0.5f, 2);
+        yield return new WaitForSeconds(3f);
+        cc.enabled = true;
+
+        ani._isLadder = false;
+    }
+
     float vel;
+    #region LadderSystem
     void RayCast()
     {
         Ray Ladder = new Ray(transform.position + new Vector3(0, 0.7f, 0), transform.forward);
@@ -259,6 +297,8 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    #endregion
 
 
 }
