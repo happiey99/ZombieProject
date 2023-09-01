@@ -57,11 +57,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: isLadder
-    m_EventTreshold: 0
-  - m_ConditionMode: 4
-    m_ConditionEvent: ladderSpeed
+  - m_ConditionMode: 1
+    m_ConditionEvent: LadderD
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1442773649468414122}
@@ -478,11 +475,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: isLadder
-    m_EventTreshold: 0
-  - m_ConditionMode: 3
-    m_ConditionEvent: ladderSpeed
+  - m_ConditionMode: 1
+    m_ConditionEvent: LadderU
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6365750146156494033}
