@@ -57,8 +57,11 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: LadderD
+  - m_ConditionMode: 2
+    m_ConditionEvent: isLadder
+    m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: ladderSpeed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1442773649468414122}
@@ -553,7 +556,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0.2
   m_TransitionOffset: 0
   m_ExitTime: 0.1
   m_HasExitTime: 0
@@ -977,7 +980,7 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 90, y: 220, z: 0}
-  m_EntryPosition: {x: 560, y: 350, z: 0}
+  m_EntryPosition: {x: 620, y: 370, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 280, y: -10, z: 0}
   m_DefaultState: {fileID: 4423517581813930183}
@@ -1012,7 +1015,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: LadderDown
+    m_ConditionEvent: LadderD
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5608385353907630390}
@@ -1271,6 +1274,14 @@ BlendTree:
   m_Name: LadderBlend
   m_Childs:
   - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: fb530cafed4a28f4a859dd060e50b745, type: 3}
+    m_Threshold: -2
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: move
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ee18c257f55746a49b0cb6b6d939b6ba, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
@@ -1296,7 +1307,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: ladderSpeed
   m_BlendParameterY: move
-  m_MinThreshold: -1
+  m_MinThreshold: -2
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0

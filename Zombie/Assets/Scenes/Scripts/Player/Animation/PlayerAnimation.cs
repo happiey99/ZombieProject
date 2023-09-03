@@ -8,10 +8,7 @@ using UnityEngine.UIElements;
 public class PlayerAnimation : MonoBehaviour
 {
 
-    Animator ani;
-    public bool LadderU;
-    public bool LadderD;
-    public bool LadderDown;
+    public Animator ani;
 
     bool isJump;
 
@@ -29,6 +26,11 @@ public class PlayerAnimation : MonoBehaviour
     bool isLadder;
     float moveSpeed;
     float ladderSpeed;
+
+    public bool LadderU;
+    public bool LadderD;
+
+
     public bool _isJump { get { return isJump; } set { isJump = value; } }
     public bool _isFalling { get { return isFalling; } set { isFalling = value; } }
     public bool _isRunning { get { return isRunning; } set { isRunning = value; } }
@@ -79,7 +81,6 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetFloat("ladderSpeed", ladderSpeed);
         ani.SetBool("LadderU", LadderU);
         ani.SetBool("LadderD", LadderD);
-        ani.SetBool("LadderDown",LadderDown);
     }
 
 
