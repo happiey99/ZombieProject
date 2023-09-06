@@ -5652,6 +5652,7 @@ GameObject:
   - component: {fileID: 7761234182069941700}
   - component: {fileID: 7702713136616999866}
   - component: {fileID: 7702713136616999865}
+  - component: {fileID: 7761234182069941701}
   - component: {fileID: 7702713136616999867}
   - component: {fileID: 7702713136616999868}
   m_Layer: 6
@@ -5673,8 +5674,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3399cc93d7a4b1e9df00edbbd19960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cc: {fileID: 0}
+  ani: {fileID: 0}
   animator: {fileID: 0}
-  ladderSpeed: 0
 --- !u!143 &7702713136616999866
 CharacterController:
   m_ObjectHideFlags: 0
@@ -7041,6 +7043,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7761234182069941701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7702713136616999864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b3214607b653ed4fb72326c490bf6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
