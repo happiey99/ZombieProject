@@ -91,26 +91,30 @@ public class LadderSystem : MonoBehaviour
             }
         }
 
-        if (lagHit && !headHit && !headHit && !pc.ani._isLadder)
+        if (lagHit && !hit && !headHit && !pc.ani._isLadder)
         {
             StartCoroutine(LadderStartDown(ladder));
         }
     }
     IEnumerator LadderStartDown(RaycastHit hit)
-    {//½Ã¹ß
-        pc.ani.LadderD = true;
+    {
         pc.cc.enabled = false;
 
-        Vector3 vector =
-            new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
-
-        transform.position = vector;
-        //transform.forward = hit.transform.forward;
-
-        yield return StartCoroutine(DelayAnimation());
+        //Vector3 vector =
+        //    new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
+        Vector3 ladderV =
+      new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
+        Vector3 vector = ladderV + hit.transform.forward * 0.5f;
 
         pc.ani._isLadder = true;
+        yield return StartCoroutine(SetPosTime(hit.transform.forward * -1, vector));
+
+        pc.ani.LadderD = true;
+
+        yield return StartCoroutine(DelayAnimation());
         pc.ani.LadderD = false;
+        //transform.position = ladderV;
+        
         pc.cc.enabled = true;
         yield return null;
     }
@@ -118,8 +122,10 @@ public class LadderSystem : MonoBehaviour
     IEnumerator LadderStartUp(RaycastHit hit)
     {
         pc.cc.enabled = false;
+        Vector3 ladderV =
+            new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
+        Vector3 vector = ladderV + hit.transform.forward * -0.35f;
 
-        Vector3 vector = hit.transform.position + hit.transform.forward * -0.35f;
 
         yield return StartCoroutine(SetPosTime(hit.transform, vector));
         pc.cc.enabled = true;
@@ -156,6 +162,22 @@ public class LadderSystem : MonoBehaviour
 
     float time = 0.1f;
 
+    IEnumerator SetPosTime(Vector3 t, Vector3 vector)
+    {
+        float elaps = 0.0f;
+
+        while (elaps < time)
+        {
+            elaps += Time.deltaTime;
+
+            transform.forward = Vector3.Lerp(transform.forward, t, elaps / time);
+            transform.position = Vector3.Lerp(transform.position, vector, elaps / time);
+
+            yield return null;
+        }
+
+        yield return null;
+    }
     IEnumerator SetPosTime(Transform t, Vector3 vector)
     {
         float elaps = 0.0f;

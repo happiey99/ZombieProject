@@ -315,6 +315,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: isLadder
     m_EventTreshold: 0
+  - m_ConditionMode: 3
+    m_ConditionEvent: ladderSpeed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: LadderD
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5491860842694604905}
   m_Solo: 0
