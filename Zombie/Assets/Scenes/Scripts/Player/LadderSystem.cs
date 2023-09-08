@@ -96,14 +96,12 @@ public class LadderSystem : MonoBehaviour
             StartCoroutine(LadderStartDown(ladder));
         }
     }
+
     IEnumerator LadderStartDown(RaycastHit hit)
     {
         pc.cc.enabled = false;
 
-        //Vector3 vector =
-        //    new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
-        Vector3 ladderV =
-      new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
+        Vector3 ladderV = new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
         Vector3 vector = ladderV + hit.transform.forward * 0.5f;
 
         pc.ani._isLadder = true;
@@ -113,7 +111,6 @@ public class LadderSystem : MonoBehaviour
 
         yield return StartCoroutine(DelayAnimation());
         pc.ani.LadderD = false;
-        //transform.position = ladderV;
         
         pc.cc.enabled = true;
         yield return null;
