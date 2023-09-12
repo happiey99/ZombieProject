@@ -30,6 +30,8 @@ public class PlayerAnimation : MonoBehaviour
     public bool LadderU;
     public bool LadderD;
 
+    public bool isGrab;
+    public float GrabValue;
 
     public bool _isJump { get { return isJump; } set { isJump = value; } }
     public bool _isFalling { get { return isFalling; } set { isFalling = value; } }
@@ -79,8 +81,10 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isLadder", isLadder);
         ani.SetFloat("move", moveSpeed);
         ani.SetFloat("ladderSpeed", ladderSpeed);
+        ani.SetFloat("GrabValue", GrabValue);
         ani.SetBool("LadderU", LadderU);
         ani.SetBool("LadderD", LadderD);
+        ani.SetBool("isGrab", isGrab);
     }
 
 

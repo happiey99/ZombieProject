@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class LadderSystem : MonoBehaviour
 {
     PlayerController pc;
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         pc = GetComponent<PlayerController>();
     }
@@ -15,12 +16,14 @@ public class LadderSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ResetScene();
         RayCast();
+        //GrabBar();
     }
 
 
-    Ray lagRay;
     Ray ray;
+    Ray lagRay;
     Ray headRay;
 
     float ladderSpeed;
@@ -111,7 +114,7 @@ public class LadderSystem : MonoBehaviour
 
         yield return StartCoroutine(DelayAnimation());
         pc.ani.LadderD = false;
-        
+
         pc.cc.enabled = true;
         yield return null;
     }
@@ -198,4 +201,37 @@ public class LadderSystem : MonoBehaviour
         yield return new WaitForSeconds(curAnimationTime);
     }
 
+    void GrabBar()
+    {
+        RaycastHit obj;
+        LayerMask mask = LayerMask.GetMask("CanGrab");
+
+        if (Physics.Raycast(headRay, out obj, 0.5f, mask))
+        {
+            if (Input.GetKey(KeyCode.Space) && !pc.ani.isGrab)
+            {
+                pc.enabled = false;
+            
+                StartCoroutine(Grap(true));
+            }
+        }
+    }
+
+
+    IEnumerator Grap(bool value)
+    {
+        pc.ani.isGrab = value;
+        yield return StartCoroutine(DelayAnimation());
+        pc.enabled = true;
+    }
+
+
+
+    void ResetScene()
+    {
+        if (Input.GetKey(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(LadderSystem))]
 public class PlayerController : MonoBehaviour
 {
 
@@ -9,13 +10,15 @@ public class PlayerController : MonoBehaviour
     public PlayerAnimation ani;
     public Animator animator;
 
+    LadderSystem LS;
+
     Vector3 velocity;
     float gravity = -9.8f * 2;
     LayerMask groundMask;
 
-    Transform aimTarget;
 
-    float jumpHight = 3f;
+    [SerializeField]
+    float jumpHight = 1.5f;
 
     float moveSpeed = 2f;
 
@@ -28,20 +31,20 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
 
         ani = Extention.GetAddComponent<PlayerAnimation>(this.gameObject);
+        LS = GetComponent<LadderSystem>();
         #endregion
 
-        aimTarget = Camera.main.transform.parent.GetChild(0);
         groundMask = LayerMask.GetMask("Ground");
-
+        LS.Init();
     }
 
     // Update is called once per frame
-    playerState p;
     void Update()
     {
+
         Ground();
 
-        if (ani._isLadder || !cc.enabled)
+        if (ani._isLadder || !cc.enabled || ani.isGrab)
             return;
 
         Move();
@@ -164,6 +167,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-  
+   
 }
 
