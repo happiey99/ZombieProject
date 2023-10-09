@@ -1,24 +1,26 @@
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
-[RequireComponent(typeof(LadderSystem))]
+
+
 public class PlayerController : MonoBehaviour
 {
-
-
+    [HideInInspector]
     public CharacterController cc;
+    [HideInInspector]
     public PlayerAnimation ani;
+    [HideInInspector]
     public Animator animator;
 
-    LadderSystem LS;
+    Parkour parkour;
 
     Vector3 velocity;
     float gravity = -9.8f * 2;
     LayerMask groundMask;
 
 
-    [SerializeField]
-    float jumpHight = 1.5f;
+    float jumpHight = 1.2f;
 
     float moveSpeed = 2f;
 
@@ -29,13 +31,13 @@ public class PlayerController : MonoBehaviour
     {
         #region GetComponent
         cc = GetComponent<CharacterController>();
-
-        ani = Extention.GetAddComponent<PlayerAnimation>(this.gameObject);
-        LS = GetComponent<LadderSystem>();
+        animator = GetComponent<Animator>();
+        ani = Extention.GetAddComponent<PlayerAnimation>(gameObject);
+        parkour = GetComponent<Parkour>();
         #endregion
 
         groundMask = LayerMask.GetMask("Ground");
-        LS.Init();
+        parkour.Init();
     }
 
     // Update is called once per frame
@@ -44,17 +46,27 @@ public class PlayerController : MonoBehaviour
 
         Ground();
 
+
+
         if (ani._isLadder || !cc.enabled || ani.isGrab)
+        {
+            moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
+            ani._moveSpeed = moveSpeed;
             return;
+        }
+
+        Gravity();
 
         Move();
 
-        Gravity();
+        Avoid();
 
         Jump();
 
         Crouch();
+
         mouseInput();
+
 
     }
 
@@ -92,14 +104,33 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = Mathf.Lerp(moveSpeed, 2, aniSpeed * Time.deltaTime);
                 ani._isRunning = false;
             }
-
-
         }
 
-        ani._moveSpeed = moveSpeed;
 
+        ani._moveSpeed = moveSpeed;
         PlayerMove(moveDir, moveSpeed);
     }
+
+    bool isAvoid = false;
+
+    public void Avoid()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (!isAvoid)
+            {
+                isAvoid = true;
+                animator.Play("Roll_Fwd");
+                StartCoroutine(AnimationTimer(2f));
+            }
+        }
+    }
+    IEnumerator AnimationTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        isAvoid = false;
+    }
+
 
     public void PlayerMove(Vector3 move, float speed)
     {
@@ -109,7 +140,6 @@ public class PlayerController : MonoBehaviour
 
     void Gravity()
     {
-
 
         if (ani._isGround && velocity.y < 0)
         {
@@ -133,17 +163,20 @@ public class PlayerController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
         }
     }
+
     void mouseInput()
     {
         if (Input.GetMouseButtonDown(1))
         {
             ani._isAim = ani.CurrentAnimationSet(ani._isAim);
+
         }
+        
     }
 
     void Crouch()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             ani._isCrouch = ani.CurrentAnimationSet(ani._isCrouch);
 
@@ -167,6 +200,5 @@ public class PlayerController : MonoBehaviour
 
     }
 
-   
 }
 

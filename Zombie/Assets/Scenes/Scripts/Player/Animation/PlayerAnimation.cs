@@ -29,9 +29,15 @@ public class PlayerAnimation : MonoBehaviour
 
     public bool LadderU;
     public bool LadderD;
+    public bool LadderS;
 
     public bool isGrab;
+    public bool isHang;
     public float GrabValue;
+
+    public bool isCombat;
+    public int combatCount;
+     
 
     public bool _isJump { get { return isJump; } set { isJump = value; } }
     public bool _isFalling { get { return isFalling; } set { isFalling = value; } }
@@ -50,6 +56,7 @@ public class PlayerAnimation : MonoBehaviour
 
     float setCrouchWeight;
     float setAimWeight;
+
 
     void Start()
     {
@@ -70,6 +77,7 @@ public class PlayerAnimation : MonoBehaviour
         AnimationState();
         setCrouchWeight = SetAniLayer(1, isCrouch, setCrouchWeight);
         setAimWeight = SetAniLayer(2, isAim, setAimWeight);
+      
     }
 
     void AnimationState()
@@ -85,6 +93,9 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("LadderU", LadderU);
         ani.SetBool("LadderD", LadderD);
         ani.SetBool("isGrab", isGrab);
+        //ani.SetInteger("combatCount", combatCount);
+        ani.SetBool("LadderS", LadderS);
+        ani.SetBool("isHang", isHang);
     }
 
 

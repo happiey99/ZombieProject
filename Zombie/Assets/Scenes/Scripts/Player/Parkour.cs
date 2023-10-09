@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class LadderSystem : MonoBehaviour
+public class Parkour : MonoBehaviour
 {
     PlayerController pc;
+    Animator animator;
     // Start is called before the first frame update
     public void Init()
     {
+        animator = GetComponent<Animator>();
         pc = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ResetScene();
         RayCast();
-        //GrabBar();
+        Grab();
     }
 
 
@@ -87,11 +89,14 @@ public class LadderSystem : MonoBehaviour
                 Vector3 vector = new Vector3(0, ladderSpeed, 0);
 
                 if (pc.cc.enabled)
-                {
-                    pc.ani._ladderSpeed = ladderSpeed;
                     pc.cc.Move(vector * Time.deltaTime);
-                }
+
             }
+
+            if (pc.ani._isGround)
+                pc.ani._ladderSpeed = 0;
+
+            pc.ani._ladderSpeed = ladderSpeed;
         }
 
         if (lagHit && !hit && !headHit && !pc.ani._isLadder)
@@ -99,6 +104,90 @@ public class LadderSystem : MonoBehaviour
             StartCoroutine(LadderStartDown(ladder));
         }
     }
+
+    void Grab()
+    {
+        LayerMask layerMask = LayerMask.GetMask("CanGrab");
+        RaycastHit hit;
+
+        bool headHit = Physics.Raycast(headRay, out hit, 0.5f, layerMask);
+
+        if (headHit)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(GrabBar(hit));
+            }
+
+        }
+
+        if (pc.ani.isGrab && pc.ani.isHang)
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                pc.ani.GrabValue = 1;
+                StartCoroutine(GrabUp());
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                pc.ani.GrabValue = -1;
+                StartCoroutine(GrabDown());
+            }
+
+        }
+    }
+
+    IEnumerator GrabDown()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("WallPoints_Idle"))
+        {
+            yield return new WaitForSeconds(0.2f);
+            pc.ani.isGrab = false;
+            yield return Extention.DelayAnimation(animator);
+            pc.ani.GrabValue = 0;
+            pc.ani.isHang = false;
+            yield return null;
+        }
+    }
+    IEnumerator GrabUp()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("WallPoints_Idle"))
+        {
+            yield return Extention.DelayAnimation(animator);
+
+            pc.ani.isGrab = false;
+            pc.ani.GrabValue = 0;
+            pc.ani.isHang = false;
+
+            yield return null;
+        }
+
+    }
+
+    IEnumerator GrabBar(RaycastHit hit)
+    {
+        pc.ani.isGrab = true;
+        pc.cc.enabled = false;
+
+
+        Vector3 vector =
+            new Vector3(transform.position.x, hit.transform.position.y - 1.6f, transform.position.z);
+
+        Vector3 vectorForward = hit.transform.forward;
+
+        StartCoroutine(Extention.SetForward(transform, vectorForward));
+
+        /* yield return */
+        StartCoroutine(Extention.SetPosition(transform, vector));
+        yield return StartCoroutine(Extention.DelayAnimation(animator));
+
+        pc.cc.enabled = true;
+        pc.ani.isHang = true;
+
+
+        yield return null;
+    }
+
 
     IEnumerator LadderStartDown(RaycastHit hit)
     {
@@ -108,29 +197,41 @@ public class LadderSystem : MonoBehaviour
         Vector3 vector = ladderV + hit.transform.forward * 0.5f;
 
         pc.ani._isLadder = true;
-        yield return StartCoroutine(SetPosTime(hit.transform.forward * -1, vector));
+        StartCoroutine(Extention.SetForward(transform, hit.transform.forward * -1, 0.1f));
+        yield return StartCoroutine(Extention.SetPosition(transform, vector, 0.1f));
+
 
         pc.ani.LadderD = true;
 
-        yield return StartCoroutine(DelayAnimation());
+        yield return StartCoroutine(Extention.DelayAnimation(animator));
+
         pc.ani.LadderD = false;
 
         pc.cc.enabled = true;
+
         yield return null;
     }
 
     IEnumerator LadderStartUp(RaycastHit hit)
     {
         pc.cc.enabled = false;
+
         Vector3 ladderV =
             new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
+
         Vector3 vector = ladderV + hit.transform.forward * -0.35f;
 
+        StartCoroutine(Extention.SetForward(transform, hit.transform.forward, 0.1f));
+        yield return StartCoroutine(Extention.SetPosition(transform, vector, 0.1f));
 
-        yield return StartCoroutine(SetPosTime(hit.transform, vector));
+
         pc.cc.enabled = true;
         pc.ani._isLadder = true;
-        yield return null;
+        pc.ani.LadderS = true;
+
+        yield return new WaitForSeconds(0.1f);
+        pc.ani.LadderS = false;
+
     }
 
     IEnumerator LadderFinishUp()
@@ -144,13 +245,14 @@ public class LadderSystem : MonoBehaviour
 
         pc.ani.LadderU = true;
 
-        yield return StartCoroutine(DelayAnimation());
+        yield return StartCoroutine(Extention.DelayAnimation(animator));
 
         Vector3 vector = transform.position + transform.forward / 10;
 
         pc.ani.LadderU = false;
 
-        yield return StartCoroutine(SetPosTime(transform, vector));
+        yield return StartCoroutine(Extention.SetPosition(transform, vector, 0.1f));
+        //yield return StartCoroutine(Extention.SetForward(transform, transform.forward, 0.1f));
 
         pc.ani._isLadder = false;
 
@@ -159,79 +261,12 @@ public class LadderSystem : MonoBehaviour
         yield return null;
     }
 
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawRay(ray);
+    //    Gizmos.DrawRay(lagRay);
+    //    Gizmos.DrawRay(headRay);
+    //}
 
-    float time = 0.1f;
-
-    IEnumerator SetPosTime(Vector3 t, Vector3 vector)
-    {
-        float elaps = 0.0f;
-
-        while (elaps < time)
-        {
-            elaps += Time.deltaTime;
-
-            transform.forward = Vector3.Lerp(transform.forward, t, elaps / time);
-            transform.position = Vector3.Lerp(transform.position, vector, elaps / time);
-
-            yield return null;
-        }
-
-        yield return null;
-    }
-    IEnumerator SetPosTime(Transform t, Vector3 vector)
-    {
-        float elaps = 0.0f;
-
-        while (elaps < time)
-        {
-            elaps += Time.deltaTime;
-
-            transform.forward = Vector3.Lerp(transform.forward, t.forward, elaps / time);
-            transform.position = Vector3.Lerp(transform.position, vector, elaps / time);
-
-            yield return null;
-        }
-
-        yield return null;
-    }
-    IEnumerator DelayAnimation()
-    {
-        yield return new WaitForSeconds(0.01f);
-        float curAnimationTime = pc.animator.GetCurrentAnimatorClipInfo(0).Length;
-        yield return new WaitForSeconds(curAnimationTime);
-    }
-
-    void GrabBar()
-    {
-        RaycastHit obj;
-        LayerMask mask = LayerMask.GetMask("CanGrab");
-
-        if (Physics.Raycast(headRay, out obj, 0.5f, mask))
-        {
-            if (Input.GetKey(KeyCode.Space) && !pc.ani.isGrab)
-            {
-                pc.enabled = false;
-            
-                StartCoroutine(Grap(true));
-            }
-        }
-    }
-
-
-    IEnumerator Grap(bool value)
-    {
-        pc.ani.isGrab = value;
-        yield return StartCoroutine(DelayAnimation());
-        pc.enabled = true;
-    }
-
-
-
-    void ResetScene()
-    {
-        if (Input.GetKey(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-    }
 }
