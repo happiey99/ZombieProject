@@ -194,7 +194,7 @@ public class Parkour : MonoBehaviour
         pc.cc.enabled = false;
 
         Vector3 ladderV = new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
-        Vector3 vector = ladderV + hit.transform.forward * 0.5f;
+        Vector3 vector = ladderV + hit.transform.forward * 0.5f + hit.transform.right *-0.2f;
 
         pc.ani._isLadder = true;
         StartCoroutine(Extention.SetForward(transform, hit.transform.forward * -1, 0.1f));
@@ -252,7 +252,6 @@ public class Parkour : MonoBehaviour
         pc.ani.LadderU = false;
 
         yield return StartCoroutine(Extention.SetPosition(transform, vector, 0.1f));
-        //yield return StartCoroutine(Extention.SetForward(transform, transform.forward, 0.1f));
 
         pc.ani._isLadder = false;
 

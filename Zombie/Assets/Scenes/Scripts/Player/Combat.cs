@@ -15,7 +15,7 @@ public class Combat : MonoBehaviour
 
     private void Update()
     {
-        Combo();
+        
     }
 
     public void Combo()
