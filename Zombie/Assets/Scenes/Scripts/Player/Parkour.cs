@@ -114,7 +114,7 @@ public class Parkour : MonoBehaviour
 
         if (headHit)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !pc.ani.isGrab && !pc.ani.isHang)
             {
                 StartCoroutine(GrabBar(hit));
             }
@@ -153,6 +153,7 @@ public class Parkour : MonoBehaviour
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("WallPoints_Idle"))
         {
+
             yield return Extention.DelayAnimation(animator);
 
             pc.ani.isGrab = false;
@@ -194,7 +195,7 @@ public class Parkour : MonoBehaviour
         pc.cc.enabled = false;
 
         Vector3 ladderV = new Vector3(hit.transform.position.x, hit.point.y, hit.transform.position.z);
-        Vector3 vector = ladderV + hit.transform.forward * 0.5f + hit.transform.right *-0.2f;
+        Vector3 vector = ladderV + hit.transform.forward * 0.5f + hit.transform.right * -0.2f;
 
         pc.ani._isLadder = true;
         StartCoroutine(Extention.SetForward(transform, hit.transform.forward * -1, 0.1f));

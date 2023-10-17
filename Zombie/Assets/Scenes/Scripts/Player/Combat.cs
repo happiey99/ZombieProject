@@ -5,38 +5,30 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Combat : MonoBehaviour
 {
+    float coolTime = 0.8f;
+    float cur_Time = 0.0f;
 
-    int combo_Stack = 0;
+    int attack_count = 0;
 
-    float resetTime = 2.0f;
 
-    private void Update()
+
+    private void Start()
     {
         
     }
 
-    public void Combo()
+
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            resetTime = 2.0f;
-            combo_Stack++;
+        
+
         }
 
-        if(combo_Stack > 0)
-        {
-            resetTime -= Time.deltaTime;
-        }
-
-        if(resetTime <= 0)
-        {
-            resetTime = 2.0f;
-            combo_Stack = 0;
-        }
-
-        Debug.Log(combo_Stack);
     }
 }

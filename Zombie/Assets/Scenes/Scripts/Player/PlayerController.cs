@@ -48,7 +48,9 @@ public class PlayerController : MonoBehaviour
 
 
 
-        if (ani._isLadder || !cc.enabled || ani.isGrab)
+        if (ani._isLadder ||
+            !cc.enabled || 
+            ani.isGrab)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
             ani._moveSpeed = moveSpeed;
