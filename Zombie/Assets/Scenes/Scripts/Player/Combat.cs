@@ -9,16 +9,20 @@ using UnityEngine.PlayerLoop;
 
 public class Combat : MonoBehaviour
 {
-    float coolTime = 0.8f;
-    float cur_Time = 0.0f;
-
+    public float coolTime = 0.8f;
+    public float cur_Time = 0.0f;
     int attack_count = 0;
 
+
+    Animator ani;
+
+
+    IEnumerator reset;
 
 
     private void Start()
     {
-        
+        ani = GetComponent<Animator>();
     }
 
 
@@ -26,9 +30,31 @@ public class Combat : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-        
+            if (reset != null)
+                StopCoroutine(reset);
 
+            attack_count++;
+            cur_Time = 0;
+            Debug.Log(attack_count);
+
+            reset = ResetTimer();
+
+            StartCoroutine(reset);
         }
+
+    }
+
+    IEnumerator ResetTimer()
+    {
+        while (coolTime >= cur_Time)
+        {
+            yield return null;
+
+            cur_Time += Time.deltaTime;
+        }
+
+        attack_count = 0;
+        Debug.Log("count is being: " + attack_count);
 
     }
 }
