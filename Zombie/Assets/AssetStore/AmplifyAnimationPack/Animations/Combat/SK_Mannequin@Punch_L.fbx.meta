@@ -502,7 +502,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.42117646
+        functionName: Next
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0562babb9f6190440a0a9b35d3363164, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6752941
+        functionName: CloseNext
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0562babb9f6190440a0a9b35d3363164, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99681526
+        functionName: Reset_Attack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0562babb9f6190440a0a9b35d3363164, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

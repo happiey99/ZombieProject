@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-   
+
     Transform cameraTarget;
 
     float x = 0;
@@ -16,6 +16,9 @@ public class CameraController : MonoBehaviour
 
     Transform lookHere;
 
+    public int masks;
+
+
     void Start()
     {
         player = GameObject.Find("Player");
@@ -24,9 +27,12 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cameraOriPosition = new Vector3(0, 0, -2);
         lookHere = transform.GetChild(1);
+
+        masks = (1 << 0) | (1 << 3);
     }
 
- 
+
+
     void Update()
     {
         LookAround();
@@ -40,8 +46,8 @@ public class CameraController : MonoBehaviour
         transform.position = cameraTarget.position;
 
     }
-  
-        
+
+
     void LookAround()
     {
         x += Input.GetAxis("Mouse X");
@@ -56,23 +62,20 @@ public class CameraController : MonoBehaviour
 
     void CameraRayHitWall()
     {
+        
+
         Vector3 CameraRayDir = (Camera.main.transform.position - cameraTarget.position);
         float rayDis = CameraRayDir.magnitude;
         Ray ray = new Ray(cameraTarget.position, CameraRayDir);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, rayDis))
+        if (Physics.Raycast(ray, out hit, rayDis, masks))
         {
-            Camera.main.transform.position =
-                Vector3.Lerp(Camera.main.transform.position,
-                hit.point,
-                0.7f * Time.deltaTime * 10);
+            Camera.main.transform.position =Vector3.Lerp(Camera.main.transform.position, hit.point, 0.7f * Time.deltaTime * 10);
         }
         else
         {
-            Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition,
-               cameraOriPosition,
-                0.7f * Time.deltaTime * 10);
+            Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition,cameraOriPosition,0.7f * Time.deltaTime * 10);
         }
 
     }
@@ -82,7 +85,7 @@ public class CameraController : MonoBehaviour
     void MouseWheel()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-      
+
         wheelVelue = Mathf.Clamp(wheelVelue, -10, -1);
 
         wheelVelue += scroll;

@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Animator animator;
 
+    Combat combat;
+
     Parkour parkour;
 
     Vector3 velocity;
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         ani = Extention.GetAddComponent<PlayerAnimation>(gameObject);
         parkour = GetComponent<Parkour>();
+        combat = GetComponent<Combat>();
         #endregion
 
         groundMask = LayerMask.GetMask("Ground");
@@ -50,7 +53,8 @@ public class PlayerController : MonoBehaviour
 
         if (ani._isLadder ||
             !cc.enabled || 
-            ani.isGrab)
+            ani.isGrab||
+            combat.isAttack)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0, aniSpeed * Time.deltaTime);
             ani._moveSpeed = moveSpeed;
@@ -123,13 +127,16 @@ public class PlayerController : MonoBehaviour
             {
                 isAvoid = true;
                 animator.Play("Roll_Fwd");
-                StartCoroutine(AnimationTimer(2f));
+                Invoke("AnimationTimer",3);
+
+                combat.isNext= false;
+                combat.isAttack= false;
+                combat.attact_Count = 0;
             }
         }
     }
-    IEnumerator AnimationTimer(float time)
+    void AnimationTimer()
     {
-        yield return new WaitForSeconds(time);
         isAvoid = false;
     }
 
@@ -184,7 +191,7 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-
+    
     void Ground()
     {
         ani._isGround = Physics.CheckSphere(transform.position, 0.2f, groundMask);

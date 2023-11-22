@@ -1,60 +1,86 @@
-using JetBrains.Annotations;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Xml.Serialization;
+using System.Numerics;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.Animations.Rigging;
 
+[RequireComponent(typeof(CombatAnimationKey))]
 public class Combat : MonoBehaviour
 {
-    public float coolTime = 0.8f;
-    public float cur_Time = 0.0f;
-    int attack_count = 0;
 
+    public int attact_Count;
+
+    public bool isNext ;
+    public bool isAttack ;
+
+    PlayerAnimation p_ani;
 
     Animator ani;
 
-
-    IEnumerator reset;
-
-
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         ani = GetComponent<Animator>();
+        p_ani = GetComponent<PlayerAnimation>();
+        isNext = false;
+        isAttack = false;
+        attact_Count = 0;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!p_ani._isGround)
+            return;
+
+        if (Input.GetMouseButtonDown(0)&&!isAttack)
+        {
+           
+            isAttack = true;
+
+            if (attact_Count == 0 && !isNext)
+            {
+                attact_Count = 1;
+                ani.SetTrigger("Combat_Hook");
+                Debug.Log("attack 1");
+            }
+            else if (isNext)
+            {
+                isNext = false;
+                Attack_Animation();
+            }
+
+        }
     }
 
 
-    private void Update()
+    void Attack_Animation()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (attact_Count == 1)
         {
-            if (reset != null)
-                StopCoroutine(reset);
-
-            attack_count++;
-            cur_Time = 0;
-            Debug.Log(attack_count);
-
-            reset = ResetTimer();
-
-            StartCoroutine(reset);
+            ani.SetTrigger("Punch_R");
+            attact_Count = 2;
+            Debug.Log("attack 2");
+        }
+        else if (attact_Count == 2)
+        {
+            ani.SetTrigger("Punch_L");
+            attact_Count = 3;
+            Debug.Log("attack 3");
+        }
+        else if(attact_Count == 3)
+        {
+            ani.SetTrigger("Combat_High_KicK");
+            attact_Count = 4;
+            Debug.Log("attack 4");
+        }
+        else if (attact_Count == 4)
+        {
+            ani.SetTrigger("Combat_Spinning_Kick");
+            attact_Count = 0;
+            Debug.Log("attack 5");
         }
 
-    }
-
-    IEnumerator ResetTimer()
-    {
-        while (coolTime >= cur_Time)
-        {
-            yield return null;
-
-            cur_Time += Time.deltaTime;
-        }
-
-        attack_count = 0;
-        Debug.Log("count is being: " + attack_count);
-
+       
     }
 }

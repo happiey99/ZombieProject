@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a7331fc07349b124c8c15d545676f9ed
-timeCreated: 1567558030
+timeCreated: 1540938740
 licenseType: Store
 ShaderImporter:
   defaultTextures:
@@ -10,3 +10,10 @@ ShaderImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 131930
+  packageName: POLYGON City Zombies - Low Poly 3D Art by Synty
+  packageVersion: 1.5
+  assetPath: Assets/AssetStore/PolygonApocalypse/Shader/POLYGON_Zombies.shader
+  uploadId: 614106
