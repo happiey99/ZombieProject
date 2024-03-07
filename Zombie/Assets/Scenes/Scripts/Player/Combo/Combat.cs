@@ -10,6 +10,7 @@ public class Combat : MonoBehaviour
 
     public int attact_Count;
 
+
     public bool isNext ;
     public bool isAttack ;
 
@@ -42,7 +43,7 @@ public class Combat : MonoBehaviour
             {
                 attact_Count = 1;
                 ani.SetTrigger("Combat_Hook");
-                Debug.Log("attack 1");
+                //Debug.Log("attack 1");
             }
             else if (isNext)
             {
@@ -60,25 +61,25 @@ public class Combat : MonoBehaviour
         {
             ani.SetTrigger("Punch_R");
             attact_Count = 2;
-            Debug.Log("attack 2");
+            //Debug.Log("attack 2");
         }
         else if (attact_Count == 2)
         {
             ani.SetTrigger("Punch_L");
             attact_Count = 3;
-            Debug.Log("attack 3");
+            //Debug.Log("attack 3");
         }
         else if(attact_Count == 3)
         {
             ani.SetTrigger("Combat_High_KicK");
             attact_Count = 4;
-            Debug.Log("attack 4");
+            //Debug.Log("attack 4");
         }
         else if (attact_Count == 4)
         {
             ani.SetTrigger("Combat_Spinning_Kick");
             attact_Count = 0;
-            Debug.Log("attack 5");
+            //Debug.Log("attack 5");
         }
 
        

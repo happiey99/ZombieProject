@@ -1,15 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CombatAnimationKey : MonoBehaviour
 {
     Combat combat;
-   
+    Transform HitBox;
+
+
     private void Start()
     {
         combat = GetComponent<Combat>();
- 
+        HitBox = transform.Find("HitBox");
+        HitBox.gameObject.SetActive(false);
     }
 
     public void Next()
@@ -32,6 +37,12 @@ public class CombatAnimationKey : MonoBehaviour
 
     public void Attack()
     {
-       
+        HitBox.gameObject.SetActive(true);
+        Invoke("OffObject",0.5f);
+    }
+
+    void OffObject()
+    {
+        HitBox.gameObject.SetActive(false);
     }
 }
