@@ -57,6 +57,7 @@ public class Combat : MonoBehaviour
 
     void Attack_Animation()
     {
+        
         if (attact_Count == 1)
         {
             ani.SetTrigger("Punch_R");

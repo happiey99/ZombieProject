@@ -63,6 +63,7 @@ public class CameraController : MonoBehaviour
 
     void CameraRayHitWall()
     {
+        
         Vector3 CameraRayDir = (Camera.main.transform.position - cameraTarget.position);
         float rayDis = CameraRayDir.magnitude;
         Ray ray = new Ray(cameraTarget.position, CameraRayDir);
