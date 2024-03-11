@@ -14,7 +14,6 @@ public class CombatAnimationKey : MonoBehaviour
     {
         combat = GetComponent<Combat>();
         HitBox = transform.Find("HitBox");
-        HitBox.gameObject.SetActive(false);
     }
 
     public void Next()
@@ -37,12 +36,13 @@ public class CombatAnimationKey : MonoBehaviour
 
     public void Attack()
     {
-        HitBox.gameObject.SetActive(true);
-        Invoke("OffObject",0.5f);
+        Enemy enemy = HitBox.GetComponent<HitBox>().AttackDisCheck();
+
+        if (enemy != null) 
+        {
+            enemy.Hit(20);
+        }
     }
 
-    void OffObject()
-    {
-        HitBox.gameObject.SetActive(false);
-    }
+    
 }

@@ -54,7 +54,6 @@ public class Combat : MonoBehaviour
         }
     }
 
-
     void Attack_Animation()
     {
         
