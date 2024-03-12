@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HitBox : MonoBehaviour
 {
-    private Transform player;
+    public Transform player;
 
     private Transform target;
 
@@ -35,8 +35,10 @@ public class HitBox : MonoBehaviour
         {
             Enemy en = hit[i].transform.GetComponent<Enemy>();
 
-            if (hit.Length > priority.Count && !priority.Contains(en)) 
+            if (hit.Length > priority.Count && !priority.Contains(en))
+            {
                 priority.Add(en);
+            } 
             
             en.playerDistance(player);
 
@@ -46,8 +48,8 @@ public class HitBox : MonoBehaviour
             }
             
             priority = SortPriority(priority);
+            
         }
-
     }
 
     List<Enemy> SortPriority(List<Enemy> list)
@@ -85,9 +87,14 @@ public class HitBox : MonoBehaviour
                 temp = priority[0];
                 
                 // player look enemy;
+                StartCoroutine(Extention.SetForward(player, (player.transform.position - priority[0].transform.position).normalized*-1));
+
             }
         }
         
         return temp;
     }
+    
+    
+    
 }
