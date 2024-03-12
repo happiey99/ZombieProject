@@ -9,9 +9,9 @@ public class HitBox : MonoBehaviour
 
     private Transform target;
 
-    private float attack_Dis = 1.0f;
+    public float attack_Dis = 2.0f;
 
-    private float outOfRange = 2.0f;
+    public float outOfRange = 4.0f;
 
     private LayerMask _layerMask;
 
@@ -26,7 +26,7 @@ public class HitBox : MonoBehaviour
 
     private void Update()
     {
-        RaycastHit[] hit = Physics.SphereCastAll(transform.position, 2f, transform.forward, 0,_layerMask);
+        RaycastHit[] hit = Physics.SphereCastAll(transform.position, outOfRange, transform.forward, 0,_layerMask);
 
         if (hit.Length <= 0) 
             return;

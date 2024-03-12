@@ -48,8 +48,12 @@ public class PlayerController : MonoBehaviour
     {
 
         Ground();
-
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            // ani.obsticleClimb = true;
+            
+        }
+        
 
         if (ani._isLadder ||
             !cc.enabled || 
