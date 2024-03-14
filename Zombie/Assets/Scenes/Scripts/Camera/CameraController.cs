@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class CameraController : MonoBehaviour
         cameraTarget = player.transform.GetChild(0);
 
         Cursor.lockState = CursorLockMode.Locked;
-        cameraOriPosition = new Vector3(0, 0, -2);
+        cameraOriPosition = new Vector3(0.5f, 0, -2);
         lookHere = transform.GetChild(1);
 
         masks = (1 << 0) | (1 << 3);
@@ -40,12 +41,16 @@ public class CameraController : MonoBehaviour
         CameraRayHitWall();
     }
     
+    // private void LateUpdate()
+   
+
     private void LateUpdate()
     {
+        transform.position = cameraTarget.position;
         Camera.main.transform.LookAt(lookHere);
 
-        transform.position = cameraTarget.position;
-
+        
+      
     }
 
 
@@ -60,7 +65,7 @@ public class CameraController : MonoBehaviour
     }
 
 
-
+    public Vector3 vec; 
     void CameraRayHitWall()
     {
         
@@ -69,8 +74,11 @@ public class CameraController : MonoBehaviour
         Ray ray = new Ray(cameraTarget.position, CameraRayDir);
         RaycastHit hit;
 
+        
+
         if (Physics.Raycast(ray, out hit, rayDis, masks))
         {
+            vec = hit.transform.position;
             Camera.main.transform.position =Vector3.Lerp(Camera.main.transform.position, hit.point, 0.7f * Time.deltaTime * 10);
         }
         else
@@ -90,7 +98,7 @@ public class CameraController : MonoBehaviour
 
         wheelVelue += scroll;
 
-        cameraOriPosition = new Vector3(0, 0, wheelVelue);
+        cameraOriPosition = new Vector3(0.5f, 0, wheelVelue);
     }
 
 }

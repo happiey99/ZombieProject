@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
         Ground();
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // ani.obsticleClimb = true;
+            //ani.obsticleClimb = true;
             
         }
         
