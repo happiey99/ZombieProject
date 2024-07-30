@@ -7,9 +7,9 @@ public class RigHead : MonoBehaviour
 {
     Rig rig;
 
-
-    Transform cameraAim;
-    Transform aimTarget;
+    //Transform cameraAim;
+    
+    public Transform aimTarget;
 
     [SerializeField]
     MultiAimConstraint head;
@@ -29,9 +29,6 @@ public class RigHead : MonoBehaviour
     {
         rig = GetComponent<Rig>();
         ani = transform.parent.GetComponent<PlayerAnimation>();
-
-        cameraAim = Camera.main.transform.parent;
-        aimTarget = cameraAim.transform.GetChild(0);
 
 
         Init();

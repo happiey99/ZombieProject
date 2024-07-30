@@ -20,7 +20,9 @@ public class Parkour : MonoBehaviour
     void Update()
     {
         RayCast();
-        Grab();
+        //Grab();
+        //StartCoroutine(Grab());
+        RayHitCheck();
     }
 
 
@@ -105,7 +107,7 @@ public class Parkour : MonoBehaviour
         }
     }
 
-    void Grab()
+    void RayHitCheck()
     {
         LayerMask layerMask = LayerMask.GetMask("CanGrab");
         RaycastHit hit;
@@ -113,10 +115,17 @@ public class Parkour : MonoBehaviour
         bool headHit = Physics.Raycast(headRay, out hit, 0.5f, layerMask);
 
         if (headHit)
+            StartCoroutine(Grab(headHit, hit));
+    }
+
+    IEnumerator Grab(bool headHit,RaycastHit hit)
+    {
+        
+        if (headHit)
         {
             if (Input.GetKeyDown(KeyCode.Space) && !pc.ani.isGrab && !pc.ani.isHang)
             {
-                StartCoroutine(GrabBar(hit));
+                yield return StartCoroutine(GrabBar(hit));
             }
 
         }
@@ -126,12 +135,12 @@ public class Parkour : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 pc.ani.GrabValue = 1;
-                StartCoroutine(GrabUp());
+               yield return StartCoroutine(GrabUp());
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 pc.ani.GrabValue = -1;
-                StartCoroutine(GrabDown());
+                yield return StartCoroutine(GrabDown());
             }
 
         }
@@ -153,14 +162,18 @@ public class Parkour : MonoBehaviour
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("WallPoints_Idle"))
         {
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length * 0.7f);
 
-            yield return Extention.DelayAnimation(animator);
+            //yield return Extention.DelayAnimation(animator);
 
             pc.ani.isGrab = false;
             pc.ani.GrabValue = 0;
             pc.ani.isHang = false;
 
-            yield return null;
+
+            yield return new WaitForSeconds(0.3f);
+
+            //yield return null;
         }
 
     }
@@ -174,13 +187,18 @@ public class Parkour : MonoBehaviour
         Vector3 vector =
             new Vector3(transform.position.x, hit.transform.position.y - 1.6f, transform.position.z);
 
+        //Vector3 vector =
+        //    new Vector3(hit.transform.position.x, hit.transform.position.y - 1.6f, hit.transform.position.z+0.6f);
+
         Vector3 vectorForward = hit.transform.forward;
 
         StartCoroutine(Extention.SetForward(transform, vectorForward));
 
         /* yield return */
         StartCoroutine(Extention.SetPosition(transform, vector));
-        yield return StartCoroutine(Extention.DelayAnimation(animator));
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length * 0.7f);
+        //yield return StartCoroutine(Extention.DelayAnimation(animator));
+        
 
         pc.cc.enabled = true;
         pc.ani.isHang = true;
@@ -261,12 +279,6 @@ public class Parkour : MonoBehaviour
         yield return null;
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawRay(ray);
-    //    Gizmos.DrawRay(lagRay);
-    //    Gizmos.DrawRay(headRay);
-    //}
+   
 
 }

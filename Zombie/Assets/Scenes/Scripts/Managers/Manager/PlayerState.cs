@@ -13,11 +13,6 @@ public enum playerState
     aim,
     ladder,
 }
-enum multiMotion
-{
-    able,
-    unable,
-}
 
 public class PlayerState
 {

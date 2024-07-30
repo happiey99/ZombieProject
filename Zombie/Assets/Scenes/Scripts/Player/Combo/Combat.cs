@@ -11,8 +11,8 @@ public class Combat : MonoBehaviour
     public int attact_Count;
 
 
-    public bool isNext ;
-    public bool isAttack ;
+    public bool isNext;
+    public bool isAttack;
 
     PlayerAnimation p_ani;
 
@@ -31,7 +31,7 @@ public class Combat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!p_ani._isGround)
+        if (!p_ani._isGround|| p_ani._isAim)
             return;
 
         if (Input.GetMouseButtonDown(0)&&!isAttack)

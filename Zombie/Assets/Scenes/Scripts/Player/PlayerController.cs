@@ -3,7 +3,6 @@ using System.Threading;
 using UnityEngine;
 
 
-
 public class PlayerController : MonoBehaviour
 {
     [HideInInspector]
@@ -12,6 +11,9 @@ public class PlayerController : MonoBehaviour
     public PlayerAnimation ani;
     [HideInInspector]
     public Animator animator;
+
+    [SerializeField]
+    Transform CameraTarget;
 
     Combat combat;
 
@@ -41,19 +43,15 @@ public class PlayerController : MonoBehaviour
 
         groundMask = LayerMask.GetMask("Ground");
         parkour.Init();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        Ground();
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            //ani.obsticleClimb = true;
-            
-        }
-        
+        Ground();   
 
         if (ani._isLadder ||
             !cc.enabled || 
@@ -66,7 +64,16 @@ public class PlayerController : MonoBehaviour
         }
 
         Gravity();
-        
+
+        KeyboardInput();
+
+        mouseInput();
+
+    }
+
+
+    void KeyboardInput()
+    {
         Move();
 
         Avoid();
@@ -74,11 +81,8 @@ public class PlayerController : MonoBehaviour
         Jump();
 
         Crouch();
-
-        mouseInput();
-
-
     }
+
 
     void Move()
     {
@@ -88,6 +92,8 @@ public class PlayerController : MonoBehaviour
         float horizental = Input.GetAxis("Horizontal");
 
         Vector3 move = new Vector3(horizental, 0, vertical).normalized;
+
+   
 
         if (move == Vector3.zero)
         {
@@ -99,10 +105,12 @@ public class PlayerController : MonoBehaviour
             Vector3 lookForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
             Vector3 lookRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
 
-            moveDir = (lookForward * move.z) + (lookRight * move.x);
 
+            moveDir = (lookForward * move.z) + (lookRight * move.x);
             if (!ani._isAim)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 6.0f);
+            else
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), Time.deltaTime * 6.0f); ;
 
             if (Input.GetKey(KeyCode.LeftShift) && !ani._isCrouch)
             {
@@ -116,7 +124,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
+       
         ani._moveSpeed = moveSpeed;
         PlayerMove(moveDir, moveSpeed);
     }
@@ -174,6 +182,7 @@ public class PlayerController : MonoBehaviour
 
             // Jump 공식 = sqrt(JumpHight * -2f * gravity)
             velocity.y = Mathf.Sqrt(jumpHight * -2f * gravity);
+
         }
     }
 
@@ -184,6 +193,12 @@ public class PlayerController : MonoBehaviour
             ani._isAim = ani.CurrentAnimationSet(ani._isAim);
 
         }
+
+        if (Input.GetMouseButton(0)&& ani._isAim)
+        {
+            Debug.Log("shoot");
+        }
+        
         
     }
 
@@ -204,11 +219,14 @@ public class PlayerController : MonoBehaviour
         {
             ani._isFalling = false;
             ani._isJump = false;
+
+
         }
         else
         {
             ani._isFalling = true;
             ani._isCrouch = false;
+
         }
 
     }

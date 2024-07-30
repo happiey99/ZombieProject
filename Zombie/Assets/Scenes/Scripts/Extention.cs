@@ -16,6 +16,7 @@ public static class Extention
         return component;
     }
 
+    
     public static IEnumerator SetPosition(Transform player, Vector3 vector, float time = 0.1f)
     {
         float elaps = 0.0f;
@@ -44,10 +45,10 @@ public static class Extention
         yield return null;
     }
    
-    public static IEnumerator DelayAnimation(Animator ani, int layer = 0)
+    public static IEnumerator DelayAnimation(Animator ani, int layer = 0, float timeRatio = 1.0f)
     { 
         yield return new WaitForSeconds(0.01f);
-        float curAnimationTime = ani.GetCurrentAnimatorClipInfo(layer).Length;
+        float curAnimationTime = ani.GetCurrentAnimatorClipInfo(layer).Length * timeRatio;
         yield return new WaitForSeconds(curAnimationTime);
     }
 
@@ -56,7 +57,7 @@ public static class Extention
         // Vector3 cameraOriPos = new Vector3(0, 0, -2);
         Vector3 cameraOriPos = Camera.main.transform.localPosition;
 
-        Debug.Log(cameraOriPos);
+        //Debug.Log(cameraOriPos);
         
         float elapsedTime = 0.0f;
 

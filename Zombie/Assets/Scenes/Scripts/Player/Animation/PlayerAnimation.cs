@@ -27,7 +27,8 @@ public class PlayerAnimation : MonoBehaviour
     float moveSpeed;
     float ladderSpeed;
 
-    public bool obsticleClimb;
+    public bool obsticleClimbM;
+    public bool obsticleClimbH;
 
     public bool LadderU;
     public bool LadderD;
@@ -100,7 +101,9 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool("isGrab", isGrab);
         ani.SetBool("LadderS", LadderS);
         ani.SetBool("isHang", isHang);
-        ani.SetBool("obsticleClimb",obsticleClimb);
+        ani.SetBool("obsticleClimbM",obsticleClimbM);
+        ani.SetBool("obsticleClimbH", obsticleClimbH);
+
     }
 
 
